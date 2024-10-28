@@ -1,6 +1,8 @@
 package vn.hoidanit.laptopshop.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -8,7 +10,8 @@ import jakarta.persistence.Table;
 @Table(name = "user")
 public class User {
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String password;
@@ -40,14 +43,6 @@ public class User {
         this.password = password;
     }
 
-    public String getFullName() {
-        return fullname;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullname = fullName;
-    }
-
     public String getAdress() {
         return adress;
     }
@@ -74,6 +69,14 @@ public class User {
                 ", adress='" + adress + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
 }

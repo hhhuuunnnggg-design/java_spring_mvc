@@ -22,7 +22,6 @@ uri="http://www.springframework.org/tags/form" %>
     <!-- <link rel="stylesheet" href="/css/demo.css" /> -->
   </head>
   <body>
-    <h1>chào tất cả các bạn đây là /amdin/user</h1>
     <!-- ----------------------------------------------------- -->
     <div class="container mt-5">
       <div class="row">

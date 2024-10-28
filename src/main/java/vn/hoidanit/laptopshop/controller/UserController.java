@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.hoidanit.laptopshop.entity.User;
+import vn.hoidanit.laptopshop.repository.UserRepository;
 import vn.hoidanit.laptopshop.service.UserService;
 
 @Controller
@@ -15,26 +16,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // -------------------------------------
-    // @RequestMapping("/")
-    // public String getHomePage(Model model) {
-    // String test = this.userService.handleHello();
-    // model.addAttribute("eric", test);
-    // return "hello";
-    // }
+    @Autowired
+    private UserRepository userRepository;
 
-    // @RequestMapping("/admin/user")
-    // public String getuserPage(Model model) {
-    // model.addAttribute("newUser", new User());
-    // return "admin/user/create";
-    // }
-
-    // @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    // public String creatUserPage(Model model, @ModelAttribute("newUser") User
-    // nguyendinhhung) {
-    // System.out.println("run here: " + nguyendinhhung);
-    // return "hello";
-    // }
     // ---------------------------------------
 
     @RequestMapping("/")
@@ -58,8 +42,9 @@ public class UserController {
     public ModelAndView createUserPage(@ModelAttribute("newUser") User nguyendinhhung) {
         System.out.println("run here: " + nguyendinhhung);
         // Sau khi tạo user, có thể redirect hoặc trả về view khác
-        ModelAndView modelAndView = new ModelAndView("hello");
+        ModelAndView modelAndView = new ModelAndView("hello"); // view của jsp
         modelAndView.addObject("message", "User created successfully!");
+        this.userService.handleSaveUser(nguyendinhhung);
         return modelAndView;
     }
 }
