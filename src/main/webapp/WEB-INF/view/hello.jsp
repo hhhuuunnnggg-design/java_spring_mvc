@@ -21,7 +21,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <!-- <link rel="stylesheet" href="/css/demo.css" /> -->
   </head>
   <body>
-    htllo from JSP
+    htllo from JSP từ client
     <h1>${eric}</h1>
     <button class="btn btn-warning">submit</button>
   </body>
