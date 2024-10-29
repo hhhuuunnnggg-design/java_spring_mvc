@@ -55,9 +55,25 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                   <td>${user.email}</td>
                   <td>${user.fullname}</td>
                   <td>
-                    <button type="button" class="btn btn-success">View</button>
-                    <button class="btn btn-warning">Update</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
+                    <!-- đây là API -->
+                    <a href="/admin/user/${user.id}"
+                      ><button type="button" class="btn btn-success">
+                        View
+                      </button></a
+                    >
+                    <a href="/admin/update/${user.id}"
+                      ><button type="button" class="btn btn-warning">
+                        Update
+                      </button></a
+                    >
+
+                    <button
+                      type="button"
+                      class="btn btn-danger"
+                      onclick="deleteUser(${user.id})"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               </c:forEach>
@@ -66,5 +82,26 @@ uri="http://java.sun.com/jsp/jstl/core" %>
         </div>
       </div>
     </div>
+    <!-- js -->
+    <script>
+      function deleteUser(userId) {
+        if (
+          confirm(
+            "Bạn có chắc muốn xóa người dùng với ID: " + userId + " không?"
+          )
+        ) {
+          $.ajax({
+            url: "/admin/detele/" + userId,
+            type: "DELETE",
+            success: function (result) {
+              location.reload(); // Tải lại trang để cập nhật danh sách
+            },
+            error: function (err) {
+              alert("Có lỗi xảy ra khi xóa người dùng.");
+            },
+          });
+        }
+      }
+    </script>
   </body>
 </html>
