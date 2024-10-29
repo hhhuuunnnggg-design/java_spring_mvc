@@ -22,88 +22,95 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // ---------------------------------------
-
+    // Trang chính
     @RequestMapping("/")
-    public ModelAndView getHomePage() {
+    public ModelAndView getHelloPage() {
         List<User> arrUsers = this.userService.getAllUsersByEmail("lceo7093@gmail.com");
 
-        ModelAndView modelAndView = new ModelAndView("hello"); // vewname là đường link dẫ đến jsp
+        ModelAndView modelAndView = new ModelAndView("hello"); // view name là đường dẫn đến JSP
         String test = this.userService.handleHello();
         modelAndView.addObject("eric", test);
         return modelAndView;
     }
 
+    // Trang danh sách người dùng
     @RequestMapping("/admin/user")
     public ModelAndView getUserPage() {
         ModelAndView modelAndView = new ModelAndView("admin/user/table-user");
         List<User> users = this.userService.getAllUsers();
-
         modelAndView.addObject("tableListUser", users);
         return modelAndView;
     }
 
+    // Chi tiết người dùng
     @GetMapping("/admin/user/{id}")
     public ModelAndView getUserDetailPage(@PathVariable Long id) {
-
-        User userId = this.userService.getUserById(id);
+        User user = this.userService.getUserById(id);
         ModelAndView modelAndView = new ModelAndView("admin/user/showView");
-        modelAndView.addObject("detailUserId", userId);
-        modelAndView.addObject("userId", id);
+        if (user != null) {
+            modelAndView.addObject("detailUserId", user);
+            modelAndView.addObject("userId", id);
+        } else {
+            // Xử lý khi không tìm thấy người dùng
+            modelAndView.addObject("errorMessage", "Không tìm thấy người dùng với ID " + id);
+        }
         return modelAndView;
     }
 
-    // ---------start uơdate
+    // Cập nhật người dùng
     @GetMapping("/admin/update/{id}")
     public ModelAndView getUpdateUser(@PathVariable Long id) {
-        User userId = this.userService.getUserById(id);
-        System.out.println(userId);
-        ModelAndView modelAndView = new ModelAndView("admin/user/update"); // ăn theo file của url
-        modelAndView.addObject("UpdateUserId", userId);
-        modelAndView.addObject("userId", id);
+        User user = this.userService.getUserById(id);
+        ModelAndView modelAndView = new ModelAndView("admin/user/update");
+        if (user != null) {
+            modelAndView.addObject("UpdateUserId", user);
+            modelAndView.addObject("userId", id);
+        } else {
+            modelAndView.addObject("errorMessage", "Không tìm thấy người dùng với ID " + id);
+        }
         return modelAndView;
     }
 
     @PostMapping("/admin/update/{id}")
-    public ModelAndView postUpdateUser(@ModelAttribute("newUser") User nguyendinhhung) {
-        User CurrentUser = this.userService.getUserById(nguyendinhhung.getId());
-        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user"); // ăn theo file của url
-        if (CurrentUser != null) {
-            CurrentUser.setEmail(nguyendinhhung.getEmail());
-            CurrentUser.setFullname(nguyendinhhung.getFullname());
-            CurrentUser.setAdress(nguyendinhhung.getAdress());
-            CurrentUser.setPhone(nguyendinhhung.getPhone());
-            CurrentUser.setPassword(nguyendinhhung.getPassword());
-            this.userService.handleSaveUser(CurrentUser);
+    public ModelAndView postUpdateUser(@PathVariable Long id, @ModelAttribute("newUser") User updatedUser) {
+        User currentUser = this.userService.getUserById(id);
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user");
+        if (currentUser != null) {
+            currentUser.setEmail(updatedUser.getEmail());
+            currentUser.setFullname(updatedUser.getFullname());
+            currentUser.setAdress(updatedUser.getAdress());
+            currentUser.setPhone(updatedUser.getPhone());
+            currentUser.setPassword(updatedUser.getPassword());
+            this.userService.handleSaveUser(currentUser);
+        } else {
+            // Có thể thêm thông báo thất bại ở đây
         }
         return modelAndView;
     }
-    // end update
 
-    // start delete
+    // Xóa người dùng
     @DeleteMapping("/admin/detele/{id}")
     public ResponseEntity<String> deleteUserId(@PathVariable Long id) {
         userService.handleDeleteUserId(id);
         return ResponseEntity.ok("User với ID " + id + " đã bị xóa");
     }
 
-    // end detlete
-
+    // Trang tạo người dùng
     @RequestMapping("/admin/user/create") // view submit
-    public ModelAndView getcreateUserPage() {
+    public ModelAndView getCreateUserPage() {
         ModelAndView modelAndView = new ModelAndView("admin/user/create");
         modelAndView.addObject("newUser", new User());
         return modelAndView;
     }
 
-    // value này ăn với action bên jsp
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST) // nó kiểu có tác dụng xác nhận chức năng
-                                                                               // submit thêm tài khoảng
-    public ModelAndView createUserPage(@ModelAttribute("newUser") User nguyendinhhung) {// @ModelAttribute("newUser")
-                                                                                        // bên jsp cũng phải có
-        // Sau khi tạo user, có thể redirect hoặc trả về view khác
-        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user"); // view của jsp
-        this.userService.handleSaveUser(nguyendinhhung);
+    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
+    public ModelAndView createUserPage(@ModelAttribute("newUser") User newUser) {
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user");
+        if (newUser != null) {
+            this.userService.handleSaveUser(newUser);
+        } else {
+            // Có thể thêm thông báo thất bại ở đây
+        }
         return modelAndView;
     }
 }
