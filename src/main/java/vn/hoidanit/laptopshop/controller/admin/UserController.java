@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.ServletContext;
 import vn.hoidanit.laptopshop.entity.User;
+import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
 
 @Controller
@@ -31,6 +32,9 @@ public class UserController {
 
     @Autowired
     private ServletContext servletContext;
+
+    @Autowired
+    private UploadService uploadService;
 
     @RequestMapping("/")
     public ModelAndView getHelloPage() {
@@ -107,21 +111,7 @@ public class UserController {
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
     public ModelAndView createUser(@ModelAttribute("newUser") User newUser,
             @RequestParam("hoidanitFile") MultipartFile file) {
-        try {
-            byte[] bytes = file.getBytes();
-            String rootPath = this.servletContext.getRealPath("/resources/images");
-            File dir = new File(rootPath + File.separator + "avatar");
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
-            try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile))) {
-                stream.write(bytes);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        this.uploadService.handleSaveUploadFile(file, "avatar");
         this.userService.handleSaveUser(newUser);
         return new ModelAndView("redirect:/admin/user");
     }

@@ -12,6 +12,7 @@ uri="http://www.springframework.org/tags/form" %>
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!--start load ảnh ra giai diện -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       $(document).ready(() => {
@@ -21,6 +22,7 @@ uri="http://www.springframework.org/tags/form" %>
         });
       });
     </script>
+    <!--end load ảnh ra giai diện -->
     <link href="/css/styles.css" rel="stylesheet" />
   </head>
   <body class="sb-nav-fixed">
