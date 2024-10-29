@@ -6,28 +6,18 @@ uri="http://www.springframework.org/tags/form" %>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
-    <!-- Latest compiled and minified CSS -->
+    <title>Create User</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
-    <!-- Latest compiled JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <!-- <link href="/css/demo.css" rel="stylesheet"> -->
-    <!-- <link rel="stylesheet" href="/css/demo.css" /> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       $(document).ready(() => {
-        const avatarFile = $("#avatarFile");
-        avatarFile.change(function (e) {
+        $("#avatarFile").change(function (e) {
           const imgURL = URL.createObjectURL(e.target.files[0]);
-          $("#avatarPreview").attr("src", imgURL);
-          $("#avatarPreview").css({ display: "block" });
+          $("#avatarPreview").attr("src", imgURL).css("display", "block");
         });
       });
     </script>
@@ -41,7 +31,7 @@ uri="http://www.springframework.org/tags/form" %>
         <main>
           <div class="container-fluid px-4">
             <h1 class="mt-4">Dashboard</h1>
-            <ol class="breadcrumb mb-4" style="text-decoration: none">
+            <ol class="breadcrumb mb-4">
               <li class="breadcrumb-item active">
                 <a href="/admin/user">user</a>
               </li>
@@ -51,37 +41,31 @@ uri="http://www.springframework.org/tags/form" %>
             </ol>
           </div>
         </main>
-
         <div class="container">
           <div class="row">
             <div class="col-md-6 col-12 mx-auto">
-              <h3>create a user</h3>
+              <h3>Create a user</h3>
               <hr />
-
               <form:form
                 method="post"
                 action="/admin/user/create"
                 modelAttribute="newUser"
+                enctype="multipart/form-data"
               >
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
-                      <label for="exampleInputEmail1" class="form-label"
-                        >Email
-                      </label>
+                      <label for="email" class="form-label">Email</label>
                       <form:input
                         type="email"
                         class="form-control"
                         path="email"
-                        aria-describedby="emailHelp"
                       />
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label"
-                        >Password</label
-                      >
+                      <label for="password" class="form-label">Password</label>
                       <form:input
                         type="password"
                         class="form-control"
@@ -90,13 +74,10 @@ uri="http://www.springframework.org/tags/form" %>
                     </div>
                   </div>
                 </div>
-                <!-- ---------------------------------------------- -->
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label"
-                        >PhoneNumber</label
-                      >
+                      <label for="phone" class="form-label">Phone Number</label>
                       <form:input
                         type="number"
                         class="form-control"
@@ -106,9 +87,7 @@ uri="http://www.springframework.org/tags/form" %>
                   </div>
                   <div class="col">
                     <div class="mb-3">
-                      <label for="exampleInputPassword1" class="form-label"
-                        >FullName</label
-                      >
+                      <label for="fullname" class="form-label">Full Name</label>
                       <form:input
                         type="text"
                         class="form-control"
@@ -117,15 +96,10 @@ uri="http://www.springframework.org/tags/form" %>
                     </div>
                   </div>
                 </div>
-
                 <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >Address</label
-                  >
+                  <label for="address" class="form-label">Address</label>
                   <form:input type="text" class="form-control" path="adress" />
                 </div>
-
-                <!-- ---------------------------------------------- -->
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
@@ -155,27 +129,26 @@ uri="http://www.springframework.org/tags/form" %>
                     </div>
                   </div>
                 </div>
-                <!-- ------------------------------ -->
-
-                <div class="col-12 mb-3">
+                <div class="mb-3">
                   <img
-                    style="max-height: 250px; display: none"
-                    alt="avatar preview"
+                    src=""
                     id="avatarPreview"
+                    width="120"
+                    style="display: none"
+                    alt="Avatar Preview"
                   />
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-primary">
+                    Create User
+                  </button>
+                </div>
               </form:form>
             </div>
           </div>
         </div>
-        <jsp:include page="../layout/footer.jsp" />
       </div>
     </div>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="/js/scripts.js"></script>
+    <jsp:include page="../layout/footer.jsp" />
   </body>
 </html>

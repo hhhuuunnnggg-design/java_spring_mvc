@@ -1,5 +1,9 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +16,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.ServletContext;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.service.UserService;
 
@@ -22,18 +29,18 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    // Trang chính
+    @Autowired
+    private ServletContext servletContext;
+
     @RequestMapping("/")
     public ModelAndView getHelloPage() {
         List<User> arrUsers = this.userService.getAllUsersByEmail("lceo7093@gmail.com");
-
-        ModelAndView modelAndView = new ModelAndView("hello"); // view name là đường dẫn đến JSP
+        ModelAndView modelAndView = new ModelAndView("hello");
         String test = this.userService.handleHello();
         modelAndView.addObject("eric", test);
         return modelAndView;
     }
 
-    // Trang danh sách người dùng
     @RequestMapping("/admin/user")
     public ModelAndView getUserPage() {
         ModelAndView modelAndView = new ModelAndView("admin/user/table-user");
@@ -42,7 +49,6 @@ public class UserController {
         return modelAndView;
     }
 
-    // Chi tiết người dùng
     @GetMapping("/admin/user/{id}")
     public ModelAndView getUserDetailPage(@PathVariable Long id) {
         User user = this.userService.getUserById(id);
@@ -51,13 +57,11 @@ public class UserController {
             modelAndView.addObject("detailUserId", user);
             modelAndView.addObject("userId", id);
         } else {
-            // Xử lý khi không tìm thấy người dùng
             modelAndView.addObject("errorMessage", "Không tìm thấy người dùng với ID " + id);
         }
         return modelAndView;
     }
 
-    // Cập nhật người dùng
     @GetMapping("/admin/update/{id}")
     public ModelAndView getUpdateUser(@PathVariable Long id) {
         User user = this.userService.getUserById(id);
@@ -82,35 +86,43 @@ public class UserController {
             currentUser.setPhone(updatedUser.getPhone());
             currentUser.setPassword(updatedUser.getPassword());
             this.userService.handleSaveUser(currentUser);
-        } else {
-            // Có thể thêm thông báo thất bại ở đây
         }
         return modelAndView;
     }
 
-    // Xóa người dùng
+    // start delete
     @DeleteMapping("/admin/detele/{id}")
     public ResponseEntity<String> deleteUserId(@PathVariable Long id) {
         userService.handleDeleteUserId(id);
         return ResponseEntity.ok("User với ID " + id + " đã bị xóa");
     }
 
-    // Trang tạo người dùng
-    @RequestMapping("/admin/user/create") // view submit
-    public ModelAndView getCreateUserPage() {
+    @RequestMapping(value = "/admin/user/create", method = RequestMethod.GET)
+    public ModelAndView createUserForm() {
         ModelAndView modelAndView = new ModelAndView("admin/user/create");
         modelAndView.addObject("newUser", new User());
         return modelAndView;
     }
 
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public ModelAndView createUserPage(@ModelAttribute("newUser") User newUser) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user");
-        if (newUser != null) {
-            this.userService.handleSaveUser(newUser);
-        } else {
-            // Có thể thêm thông báo thất bại ở đây
+    public ModelAndView createUser(@ModelAttribute("newUser") User newUser,
+            @RequestParam("hoidanitFile") MultipartFile file) {
+        try {
+            byte[] bytes = file.getBytes();
+            String rootPath = this.servletContext.getRealPath("/resources/images");
+            File dir = new File(rootPath + File.separator + "avatar");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
+            File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+            try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile))) {
+                stream.write(bytes);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return modelAndView;
+        this.userService.handleSaveUser(newUser);
+        return new ModelAndView("redirect:/admin/user");
     }
 }
