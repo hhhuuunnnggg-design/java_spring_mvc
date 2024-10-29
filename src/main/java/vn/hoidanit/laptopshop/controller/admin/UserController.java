@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,33 +66,36 @@ public class UserController {
         return modelAndView;
     }
 
+    // ---------start uơdate
     @GetMapping("/admin/update/{id}")
     public ModelAndView getUpdateUser(@PathVariable Long id) {
-        User user = this.userService.getUserById(id);
-        ModelAndView modelAndView = new ModelAndView("admin/user/update");
-        if (user != null) {
-            modelAndView.addObject("UpdateUserId", user);
-            modelAndView.addObject("userId", id);
-        } else {
-            modelAndView.addObject("errorMessage", "Không tìm thấy người dùng với ID " + id);
-        }
+        User userId = this.userService.getUserById(id);
+        System.out.println(userId);
+        ModelAndView modelAndView = new ModelAndView("admin/user/update"); // ăn theo file của url
+        modelAndView.addObject("UpdateUserId", userId);
+        modelAndView.addObject("avatarPath", userId.getAvatar()); // Thêm đường dẫn avatar
+        modelAndView.addObject("userId", id);
         return modelAndView;
     }
 
     @PostMapping("/admin/update/{id}")
-    public ModelAndView postUpdateUser(@PathVariable Long id, @ModelAttribute("newUser") User updatedUser) {
-        User currentUser = this.userService.getUserById(id);
-        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user");
-        if (currentUser != null) {
-            currentUser.setEmail(updatedUser.getEmail());
-            currentUser.setFullname(updatedUser.getFullname());
-            currentUser.setAdress(updatedUser.getAdress());
-            currentUser.setPhone(updatedUser.getPhone());
-            currentUser.setPassword(updatedUser.getPassword());
-            this.userService.handleSaveUser(currentUser);
+    public ModelAndView postUpdateUser(@ModelAttribute("newUser") User nguyendinhhung,
+            @RequestParam("hoidanitFile") MultipartFile file) {
+        User CurrentUser = this.userService.getUserById(nguyendinhhung.getId());
+        String avatarFileName = this.uploadService.handleSaveUploadFile(file, "avatar");
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user"); // ăn theo file của url
+        if (CurrentUser != null) {
+            CurrentUser.setEmail(nguyendinhhung.getEmail());
+            CurrentUser.setFullname(nguyendinhhung.getFullname());
+            CurrentUser.setAdress(nguyendinhhung.getAdress());
+            CurrentUser.setPhone(nguyendinhhung.getPhone());
+            CurrentUser.setPassword(nguyendinhhung.getPassword());
+            CurrentUser.setAvatar(avatarFileName);
+            this.userService.handleSaveUser(CurrentUser);
         }
         return modelAndView;
     }
+    // end update
 
     // start delete
     @DeleteMapping("/admin/detele/{id}")

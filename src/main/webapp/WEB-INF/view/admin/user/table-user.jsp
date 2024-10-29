@@ -55,6 +55,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                     <th scope="col">ID</th>
                     <th scope="col">Email</th>
                     <th scope="col">FullName</th>
+                    <th scope="col">Role123</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -68,6 +69,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                       <td>${user.id}</td>
                       <td>${user.email}</td>
                       <td>${user.fullname}</td>
+                      <td>${user.role.name}</td>
                       <td>
                         <!-- đây là API -->
                         <a href="/admin/user/${user.id}"

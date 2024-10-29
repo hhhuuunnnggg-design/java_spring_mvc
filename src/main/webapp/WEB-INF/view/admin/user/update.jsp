@@ -14,6 +14,17 @@ uri="http://www.springframework.org/tags/form" %>
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!--start load ảnh ra giai diện -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(() => {
+        $("#avatarFile").change(function (e) {
+          const imgURL = URL.createObjectURL(e.target.files[0]);
+          $("#avatarPreview").attr("src", imgURL).css("display", "block");
+        });
+      });
+    </script>
+    <!--end load ảnh ra giai diện -->
     <link href="/css/styles.css" rel="stylesheet" />
   </head>
 
@@ -46,6 +57,7 @@ uri="http://www.springframework.org/tags/form" %>
                 method="post"
                 action="/admin/user/create"
                 modelAttribute="UpdateUserId"
+                enctype="multipart/form-data"
               >
                 <div class="mb-3" style="display: none">
                   <label for="exampleInputPassword1" class="form-label"
@@ -96,6 +108,47 @@ uri="http://www.springframework.org/tags/form" %>
                   >
                   <form:input type="text" class="form-control" path="adress" />
                 </div>
+                <!-- --------satrt----------- -->
+                <div class="row">
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="roleSelect" class="form-label">Role:</label>
+                      <form:select
+                        path="role"
+                        cssClass="form-select"
+                        id="roleSelect"
+                        aria-label="Default select example"
+                      >
+                        <form:option value="" label="Chọn Role" />
+                        <form:option value="1" label="Admin" />
+                        <form:option value="2" label="User" />
+                      </form:select>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="avatarFile" class="form-label">Avatar:</label>
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="avatarFile"
+                        accept=".png, .jpg, .jpeg"
+                        name="hoidanitFile"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <img
+                    src="${avatarPath}"
+                    id="avatarPreview"
+                    width="120"
+                    style="display: none"
+                    part="avatar"
+                    alt="Avatar Preview"
+                  />
+                </div>
+                <!-- end -->
                 <button type="submit" class="btn btn-warning">Update</button>
               </form:form>
             </div>
