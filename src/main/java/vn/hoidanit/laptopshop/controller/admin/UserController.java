@@ -36,14 +36,15 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping("/")
-    public ModelAndView getHelloPage() {
-        List<User> arrUsers = this.userService.getAllUsersByEmail("lceo7093@gmail.com");
-        ModelAndView modelAndView = new ModelAndView("hello");
-        String test = this.userService.handleHello();
-        modelAndView.addObject("eric", test);
-        return modelAndView;
-    }
+    // @RequestMapping("/")
+    // public ModelAndView getHelloPage() {
+    // List<User> arrUsers =
+    // this.userService.getAllUsersByEmail("lceo7093@gmail.com");
+    // ModelAndView modelAndView = new ModelAndView("hello");
+    // String test = this.userService.handleHello();
+    // modelAndView.addObject("eric", test);
+    // return modelAndView;
+    // }
 
     @RequestMapping("/admin/user")
     public ModelAndView getUserPage() {
