@@ -26,6 +26,14 @@ public class Role {
         return id;
     }
 
+    public List<User> getUser() {
+        return user;
+    }
+
+    public void setUser(List<User> user) {
+        this.user = user;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }

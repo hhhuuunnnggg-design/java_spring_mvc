@@ -19,70 +19,91 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- <link href="/css/demo.css" rel="stylesheet"> -->
     <!-- <link rel="stylesheet" href="/css/demo.css" /> -->
+    <link href="/css/styles.css" rel="stylesheet" />
   </head>
-  <body>
-    <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-10 col-12 mx-auto">
-          <div class="d-flex justify-content-between align-items-center">
-            <h3>Table User</h3>
-            <a href="/admin/user/create"
-              ><button class="btn btn-primary">Create User</button></a
-            >
+
+  <body class="sb-nav-fixed">
+    <jsp:include page="../layout/header.jsp" />
+    <div id="layoutSidenav">
+      <jsp:include page="../layout/sidebar.jsp" />
+      <div id="layoutSidenav_content">
+        <main>
+          <div class="container-fluid px-4">
+            <h1 class="mt-4">Dashboard</h1>
+            <ol class="breadcrumb mb-4">
+              <li class="breadcrumb-item active">user</li>
+            </ol>
           </div>
-          <hr />
+        </main>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-10 col-12 mx-auto">
+              <div class="d-flex justify-content-between align-items-center">
+                <h3>Table User</h3>
+                <a href="/admin/user/create"
+                  ><button class="btn btn-primary">Create User</button></a
+                >
+              </div>
+              <hr />
 
-          <table
-            class="table table-striped table-hover table-bordered"
-            action="/admin/user"
-          >
-            <thead>
-              <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Email</th>
-                <th scope="col">FullName</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <c:forEach
-                items="${tableListUser}"
-                var="user"
-                varStatus="iteration"
+              <table
+                class="table table-striped table-hover table-bordered"
+                action="/admin/user"
               >
-                <tr>
-                  <td>${user.id}</td>
-                  <td>${user.email}</td>
-                  <td>${user.fullname}</td>
-                  <td>
-                    <!-- đây là API -->
-                    <a href="/admin/user/${user.id}"
-                      ><button type="button" class="btn btn-success">
-                        View
-                      </button></a
-                    >
-                    <a href="/admin/update/${user.id}"
-                      ><button type="button" class="btn btn-warning">
-                        Update
-                      </button></a
-                    >
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">FullName</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <c:forEach
+                    items="${tableListUser}"
+                    var="user"
+                    varStatus="iteration"
+                  >
+                    <tr>
+                      <td>${user.id}</td>
+                      <td>${user.email}</td>
+                      <td>${user.fullname}</td>
+                      <td>
+                        <!-- đây là API -->
+                        <a href="/admin/user/${user.id}"
+                          ><button type="button" class="btn btn-success">
+                            View
+                          </button></a
+                        >
+                        <a href="/admin/update/${user.id}"
+                          ><button type="button" class="btn btn-warning">
+                            Update
+                          </button></a
+                        >
 
-                    <button
-                      type="button"
-                      class="btn btn-danger"
-                      onclick="deleteUser(${user.id})"
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              </c:forEach>
-            </tbody>
-          </table>
+                        <button
+                          type="button"
+                          class="btn btn-danger"
+                          onclick="deleteUser(${user.id})"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </c:forEach>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
+        <jsp:include page="../layout/footer.jsp" />
       </div>
     </div>
-    <!-- js -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="/js/scripts.js"></script>
     <script>
       function deleteUser(userId) {
         if (
