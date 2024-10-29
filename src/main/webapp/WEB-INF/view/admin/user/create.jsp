@@ -20,6 +20,17 @@ uri="http://www.springframework.org/tags/form" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <!-- <link href="/css/demo.css" rel="stylesheet"> -->
     <!-- <link rel="stylesheet" href="/css/demo.css" /> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(() => {
+        const avatarFile = $("#avatarFile");
+        avatarFile.change(function (e) {
+          const imgURL = URL.createObjectURL(e.target.files[0]);
+          $("#avatarPreview").attr("src", imgURL);
+          $("#avatarPreview").css({ display: "block" });
+        });
+      });
+    </script>
     <link href="/css/styles.css" rel="stylesheet" />
   </head>
   <body class="sb-nav-fixed">
@@ -40,86 +51,118 @@ uri="http://www.springframework.org/tags/form" %>
             </ol>
           </div>
         </main>
+
         <div class="container">
           <div class="row">
             <div class="col-md-6 col-12 mx-auto">
               <h3>create a user</h3>
               <hr />
+
               <form:form
                 method="post"
                 action="/admin/user/create"
                 modelAttribute="newUser"
               >
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label"
-                    >Email
-                  </label>
-                  <form:input
-                    type="email"
-                    class="form-control"
-                    path="email"
-                    aria-describedby="emailHelp"
-                  />
+                <div class="row">
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="exampleInputEmail1" class="form-label"
+                        >Email
+                      </label>
+                      <form:input
+                        type="email"
+                        class="form-control"
+                        path="email"
+                        aria-describedby="emailHelp"
+                      />
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label"
+                        >Password</label
+                      >
+                      <form:input
+                        type="password"
+                        class="form-control"
+                        path="password"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >Password</label
-                  >
-                  <form:input
-                    type="password"
-                    class="form-control"
-                    path="password"
-                  />
+                <!-- ---------------------------------------------- -->
+                <div class="row">
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label"
+                        >PhoneNumber</label
+                      >
+                      <form:input
+                        type="number"
+                        class="form-control"
+                        path="phone"
+                      />
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="exampleInputPassword1" class="form-label"
+                        >FullName</label
+                      >
+                      <form:input
+                        type="text"
+                        class="form-control"
+                        path="fullname"
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >PhoneNumber</label
-                  >
-                  <form:input type="number" class="form-control" path="phone" />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >FullName</label
-                  >
-                  <form:input
-                    type="text"
-                    class="form-control"
-                    path="fullname"
-                  />
-                </div>
+
                 <div class="mb-3">
                   <label for="exampleInputPassword1" class="form-label"
                     >Address</label
                   >
                   <form:input type="text" class="form-control" path="adress" />
                 </div>
-                <!-- ------------------------------ -->
-                <div class="mb-3">
-                  <label for="roleSelect" class="form-label">Role:</label>
-                  <form:select
-                    path="role"
-                    cssClass="form-select"
-                    id="roleSelect"
-                    aria-label="Default select example"
-                  >
-                    <form:option value="" label="Chọn Role" />
-                    <form:option value="1" label="Admin" />
-                    <form:option value="2" label="User" />
-                  </form:select>
-                </div>
 
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >image:</label
-                  >
-                  <div class="input-group mb-3">
-                    <form:input
-                      type="file"
-                      class="form-control"
-                      id="inputGroupFile01"
-                      path="avatar"
-                    />
+                <!-- ---------------------------------------------- -->
+                <div class="row">
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="roleSelect" class="form-label">Role:</label>
+                      <form:select
+                        path="role"
+                        cssClass="form-select"
+                        id="roleSelect"
+                        aria-label="Default select example"
+                      >
+                        <form:option value="" label="Chọn Role" />
+                        <form:option value="1" label="Admin" />
+                        <form:option value="2" label="User" />
+                      </form:select>
+                    </div>
                   </div>
+                  <div class="col">
+                    <div class="mb-3">
+                      <label for="avatarFile" class="form-label">Avatar:</label>
+                      <input
+                        class="form-control"
+                        type="file"
+                        id="avatarFile"
+                        accept=".png, .jpg, .jpeg"
+                        name="hoidanitFile"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <!-- ------------------------------ -->
+
+                <div class="col-12 mb-3">
+                  <img
+                    style="max-height: 250px; display: none"
+                    alt="avatar preview"
+                    id="avatarPreview"
+                  />
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
               </form:form>
