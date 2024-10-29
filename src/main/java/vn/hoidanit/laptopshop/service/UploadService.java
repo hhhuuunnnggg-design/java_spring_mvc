@@ -16,7 +16,8 @@ public class UploadService {
     @Autowired
     private ServletContext servletContext;
 
-    public void handleSaveUploadFile(MultipartFile file, String targetFolder) {
+    public String handleSaveUploadFile(MultipartFile file, String targetFolder) {
+        String finalName = "";
         try {
             byte[] bytes = file.getBytes();
             // nó sẽ tự nhảy đến web app , bạn cần tự điền thêm link cho nó
@@ -25,15 +26,19 @@ public class UploadService {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
+            finalName = System.currentTimeMillis() + "-"
+                    + file.getOriginalFilename();
 
-            String fileName = System.currentTimeMillis() + "-" + file.getOriginalFilename();
-            File serverFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+            // String fileName = System.currentTimeMillis() + "-" +
+            // file.getOriginalFilename();
+            File serverFile = new File(dir.getAbsolutePath() + File.separator + finalName);
             try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(serverFile))) {
                 stream.write(bytes);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return finalName;
 
     }
 

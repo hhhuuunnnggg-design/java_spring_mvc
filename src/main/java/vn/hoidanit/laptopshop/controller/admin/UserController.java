@@ -1,9 +1,5 @@
 package vn.hoidanit.laptopshop.controller.admin;
 
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,8 +107,16 @@ public class UserController {
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
     public ModelAndView createUser(@ModelAttribute("newUser") User newUser,
             @RequestParam("hoidanitFile") MultipartFile file) {
-        this.uploadService.handleSaveUploadFile(file, "avatar");
+        // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
+        String avatarFileName = this.uploadService.handleSaveUploadFile(file, "avatar");
+
+        // Gán tên file hoặc đường dẫn file vào thuộc tính avatar của User
+        newUser.setAvatar(avatarFileName);
+
+        // Lưu đối tượng User vào cơ sở dữ liệu
         this.userService.handleSaveUser(newUser);
+
         return new ModelAndView("redirect:/admin/user");
     }
+
 }
