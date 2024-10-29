@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +33,9 @@ public class UserController {
 
     @Autowired
     private UploadService uploadService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/")
     public ModelAndView getHelloPage() {
@@ -109,10 +114,12 @@ public class UserController {
             @RequestParam("hoidanitFile") MultipartFile file) {
         // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
         String avatarFileName = this.uploadService.handleSaveUploadFile(file, "avatar");
+        // mã hóa pasWord
+        String hashPashWord = this.passwordEncoder.encode(newUser.getPassword());
 
         // Gán tên file hoặc đường dẫn file vào thuộc tính avatar của User
         newUser.setAvatar(avatarFileName);
-
+        newUser.setPassword(hashPashWord);
         // Lưu đối tượng User vào cơ sở dữ liệu
         this.userService.handleSaveUser(newUser);
 
