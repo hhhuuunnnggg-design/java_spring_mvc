@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.ServletContext;
+import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.service.UploadService;
 import vn.hoidanit.laptopshop.service.UserService;
@@ -112,12 +114,23 @@ public class UserController {
         return modelAndView;
     }
 
+    // bindingResult giúp thông báo lỗi
+    // @Valid để validate dữ liệu
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public ModelAndView createUser(@ModelAttribute("newUser") User newUser,
+    public ModelAndView createUser(@ModelAttribute("newUser") @Valid User newUser,
+            BindingResult bindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
+        // Kiểm tra lỗi validate
+        if (bindingResult.hasErrors()) {
+            ModelAndView modelAndView = new ModelAndView("admin/user/create");
+            modelAndView.addObject("newUser", newUser);
+            modelAndView.addObject("errors", bindingResult.getAllErrors());
+            return modelAndView; // Quay lại trang tạo user với thông báo lỗi
+        }
+
         // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
         String avatarFileName = this.uploadService.handleSaveUploadFile(file, "avatar");
-        // mã hóa pasWord
+        // mã hóa password
         String hashPashWord = this.passwordEncoder.encode(newUser.getPassword());
 
         // Gán tên file hoặc đường dẫn file vào thuộc tính avatar của User

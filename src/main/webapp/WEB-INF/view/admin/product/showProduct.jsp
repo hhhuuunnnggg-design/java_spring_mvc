@@ -34,6 +34,58 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
             </ol>
           </div>
         </main>
+        <!-- ---------------------------------------------- -->
+        <div class="container">
+          <div class="row">
+            <div class="col-md-6 col-12 mx-auto">
+              <h3>Table product</h3>
+              <hr />
+
+              <form
+                method="post"
+                action="/admin/user/create"
+                modelAttribute="detailUserId"
+              >
+                <div class="mb-3">
+                  <label for="exampleInputEmail1" class="form-label"
+                    >Email</label
+                  >
+                  <input
+                    type="email"
+                    class="form-control"
+                    path="email"
+                    aria-describedby="emailHelp"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPassword1" class="form-label"
+                    >Password</label
+                  >
+                  <input type="password" class="form-control" path="password" />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputPhone" class="form-label"
+                    >PhoneNumber</label
+                  >
+                  <input type="text" class="form-control" path="phone" />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputFullName" class="form-label"
+                    >FullName</label
+                  >
+                  <input type="text" class="form-control" path="fullname" />
+                </div>
+                <div class="mb-3">
+                  <label for="exampleInputAddress" class="form-label"
+                    >Address</label
+                  >
+                  <input type="text" class="form-control" path="adress" />
+                </div>
+                <a href=""><button class="btn btn-primary">back</button></a>
+              </form>
+            </div>
+          </div>
+        </div>
         <jsp:include page="../layout/footer.jsp" />
       </div>
     </div>

@@ -136,7 +136,7 @@ uri="http://www.springframework.org/tags/form" %>
         </div>
         <div class="sb-sidenav-footer">
           <div class="small">Logged in as:</div>
-          Hỏi Dân IT
+          Nguyễn Đình Hùng IT
         </div>
       </nav>
     </div>

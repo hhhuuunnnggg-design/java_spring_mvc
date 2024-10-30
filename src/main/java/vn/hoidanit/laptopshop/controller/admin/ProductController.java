@@ -13,8 +13,15 @@ public class ProductController {
     private UserService userService;
 
     @GetMapping("/admin/product")
-    public ModelAndView getHomePage() {
-        ModelAndView modelAndView = new ModelAndView("admin/product/showProduct"); // vewname là đường link dẫ đến jsp
+    public ModelAndView getProductPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/product/table-product"); // vewname là đường link dẫ đến jsp
         return modelAndView;
     }
+
+    @GetMapping("/admin/product/create")
+    public ModelAndView getCreateProductPage() {
+        ModelAndView modelAndView = new ModelAndView("admin/product/createProduct"); // vewname là đường link dẫ đến jsp
+        return modelAndView;
+    }
+
 }
