@@ -17,6 +17,9 @@ public class UploadService {
     private ServletContext servletContext;
 
     public String handleSaveUploadFile(MultipartFile file, String targetFolder) {
+        if (file.isEmpty()) {
+            return "";
+        }
         String finalName = "";
         try {
             byte[] bytes = file.getBytes();

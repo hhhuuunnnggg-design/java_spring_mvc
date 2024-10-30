@@ -1,7 +1,6 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" %> <%@ taglib prefix="c"
+<%@ page contentType="text/html" pageEncoding="UTF-8" %> <%@ taglib prefix="c"
 uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="form"
 uri="http://www.springframework.org/tags/form" %>
-
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -60,19 +59,27 @@ uri="http://www.springframework.org/tags/form" %>
                       <label for="email" class="form-label">Email</label>
                       <form:input
                         type="email"
-                        class="form-control"
+                        class="form-control is-invalid"
                         path="email"
                       />
+                      <form:errors path="email" cssClass="invalid-feedback " />
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
+                      <c:set var="errorPassWord">
+                        <form:errors
+                          path="password"
+                          cssClass="invalid-feedback"
+                        />
+                      </c:set>
                       <label for="password" class="form-label">Password</label>
                       <form:input
                         type="password"
-                        class="form-control"
+                        class="form-control ${not empty errorPassWord ? 'is-invalid' : ''}"
                         path="password"
                       />
+                      ${errorPassWord}
                     </div>
                   </div>
                 </div>

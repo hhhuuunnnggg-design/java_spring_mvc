@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -117,15 +118,17 @@ public class UserController {
     // bindingResult giúp thông báo lỗi
     // @Valid để validate dữ liệu
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
-    public ModelAndView createUser(@ModelAttribute("newUser") @Valid User newUser,
+    public ModelAndView createUser(
+            @ModelAttribute("newUser") @Valid User newUser,
             BindingResult bindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
         // Kiểm tra lỗi validate
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
         if (bindingResult.hasErrors()) {
-            ModelAndView modelAndView = new ModelAndView("admin/user/create");
-            modelAndView.addObject("newUser", newUser);
-            modelAndView.addObject("errors", bindingResult.getAllErrors());
-            return modelAndView; // Quay lại trang tạo user với thông báo lỗi
+            return new ModelAndView("/admin/user/create");
         }
 
         // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
