@@ -85,6 +85,7 @@ public class ProductController {
         Product product = productService.getProductById(id);
         ModelAndView modelAndView = new ModelAndView("admin/product/updateProduct");
         modelAndView.addObject("UpdateProductId", product); // Truyền đối tượng product vào ModelAndView
+        System.out.println("đây chính là ảnh " + product.getImage());
         return modelAndView;
     }
 

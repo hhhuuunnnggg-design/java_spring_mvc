@@ -76,8 +76,14 @@ uri="http://www.springframework.org/tags/form" %>
                   <label for="detaildesc" class="form-label"
                     >Detail Description:</label
                   >
-                  <form:input path="detaildesc" class="form-control" />
+                  <form:textarea
+                    path="detaildesc"
+                    class="form-control"
+                    rows="4"
+                    style="resize: vertical"
+                  ></form:textarea>
                 </div>
+
                 <!-- ------------------- -->
                 <div class="row">
                   <div class="col">
