@@ -50,21 +50,25 @@ uri="http://www.springframework.org/tags/form" %>
               <form:form
                 method="post"
                 action="/admin/user/create"
-                modelAttribute="newUser"
+                modelAttribute="newOneUser"
                 enctype="multipart/form-data"
               >
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
+                      <c:set var="errorEmail">
+                        <form:errors path="email" cssClass="invalid-feedback" />
+                      </c:set>
                       <label for="email" class="form-label">Email</label>
                       <form:input
                         type="email"
-                        class="form-control is-invalid"
+                        class="form-control ${not empty errorEmail ? 'is-invalid' : ''}"
                         path="email"
                       />
-                      <form:errors path="email" cssClass="invalid-feedback " />
+                      ${errorEmail}
                     </div>
                   </div>
+                  <!-- ----------------- -->
                   <div class="col">
                     <div class="mb-3">
                       <c:set var="errorPassWord">
@@ -83,6 +87,7 @@ uri="http://www.springframework.org/tags/form" %>
                     </div>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">

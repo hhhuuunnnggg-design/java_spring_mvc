@@ -10,7 +10,7 @@ import vn.hoidanit.laptopshop.entity.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User save(User nguyendinhhung);
+    User save(User newUser);
 
     List<User> findByEmailAndAdress(String email, String adress);
 

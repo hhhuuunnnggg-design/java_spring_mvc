@@ -12,7 +12,6 @@ uri="http://www.springframework.org/tags/form" %>
       rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!--start load ảnh ra giai diện -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       $(document).ready(() => {
@@ -22,7 +21,6 @@ uri="http://www.springframework.org/tags/form" %>
         });
       });
     </script>
-    <!--end load ảnh ra giai diện -->
     <link href="/css/styles.css" rel="stylesheet" />
   </head>
   <body class="sb-nav-fixed">
@@ -32,116 +30,111 @@ uri="http://www.springframework.org/tags/form" %>
       <div id="layoutSidenav_content">
         <main>
           <div class="container-fluid px-4">
-            <h1 class="mt-4">Dashboard</h1>
+            <h1 class="mt-4">Create Product</h1>
             <ol class="breadcrumb mb-4">
               <li class="breadcrumb-item active">
-                <a href="/admin/product">product</a>
+                <a href="/admin/product">Product</a>
               </li>
-              <li class="breadcrumb-item active">
-                <a href="#">create product</a>
-              </li>
+              <li class="breadcrumb-item active">Create Product</li>
             </ol>
           </div>
         </main>
         <div class="container">
           <div class="row">
             <div class="col-md-6 col-12 mx-auto">
-              <h3>Create a user</h3>
+              <h3>Create a Product</h3>
               <hr />
-              <form
+              <form:form
                 method="post"
-                action="/admin/user/create"
-                modelAttribute="newUser"
+                action="/admin/product/create"
+                modelAttribute="newOneProduct"
                 enctype="multipart/form-data"
               >
+                <!-- ----------------- -->
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
-                      <label for="email" class="form-label">Name</label>
-                      <input type="email" class="form-control" path="email" />
+                      <label for="name" class="form-label">Name</label>
+                      <form:input path="name" class="form-control" />
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
                       <label for="price" class="form-label">Price</label>
-                      <input
+                      <form:input
+                        path="price"
                         type="number"
                         class="form-control"
-                        path="password"
                       />
                     </div>
                   </div>
                 </div>
+
+                <!-- ---------------------- -->
+
                 <div class="mb-3">
-                  <label for="address" class="form-label"
-                    >Detail description:</label
+                  <label for="detaildesc" class="form-label"
+                    >Detail Description:</label
                   >
-                  <input type="text" class="form-control" path="adress" />
+                  <form:input path="detaildesc" class="form-control" />
                 </div>
+                <!-- ------------------- -->
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
-                      <label for="phone" class="form-label"
-                        >Short description</label
+                      <label for="shortdesc" class="form-label"
+                        >Short Description</label
                       >
-                      <input type="number" class="form-control" path="phone" />
+                      <form:input path="shortdesc" class="form-control" />
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
-                      <label for="fullname" class="form-label">Quantity</label>
-                      <input type="text" class="form-control" path="fullname" />
+                      <label for="quantity" class="form-label">Quantity</label>
+                      <form:input
+                        path="quantity"
+                        type="number"
+                        class="form-control"
+                      />
                     </div>
                   </div>
                 </div>
 
+                <!-- ----------------------- -->
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
-                      <label for="roleSelect" class="form-label"
-                        >Factory:</label
-                      >
-                      <br />
-                      <select
-                        path="role"
-                        cssClass="form-select"
-                        id="roleSelect"
-                        aria-label="Default select example"
-                      >
-                        <option value="" label="Chọn Role"></option>
-                        <option value="1" label="Admin"></option>
-                        <option value="2" label="User"></option>
-                      </select>
+                      <label for="factory" class="form-label">Factory:</label>
+                      <form:select path="factory" cssClass="form-select">
+                        <form:option value="" label="Select Factory" />
+                        <form:option value="Tân Châu" label="Tân Châu" />
+                        <form:option value="Tân Hiệp" label="Tân Hiệp" />
+                      </form:select>
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
-                      <label for="roleSelect" class="form-label">Target:</label>
-                      <br />
-                      <select
-                        path="role"
-                        cssClass="form-select"
-                        id="roleSelect"
-                        aria-label="Default select example"
-                      >
-                        <option value="" label="Chọn Role"></option>
-                        <option value="1" label="Admin"></option>
-                        <option value="2" label="User"></option>
-                      </select>
+                      <label for="target" class="form-label">Target:</label>
+                      <form:select path="target" cssClass="form-select">
+                        <form:option value="" label="Select Target" />
+                        <form:option value="100" label="100" />
+                        <form:option value="200" label="200" />
+                      </form:select>
                     </div>
                   </div>
                 </div>
-                <div class="col">
-                  <div class="mb-3">
-                    <label for="avatarFile" class="form-label">Avatar:</label>
-                    <input
-                      class="form-control"
-                      type="file"
-                      id="avatarFile"
-                      accept=".png, .jpg, .jpeg"
-                      name="hoidanitFile"
-                    />
-                  </div>
+
+                <!-- ----------------------------- -->
+
+                <div class="mb-3">
+                  <label for="avatarFile" class="form-label">Avatar:</label>
+                  <input
+                    class="form-control"
+                    type="file"
+                    id="avatarFile"
+                    accept=".png, .jpg, .jpeg"
+                    name="hoidanitFile"
+                  />
                 </div>
                 <div class="mb-3">
                   <img
@@ -154,10 +147,10 @@ uri="http://www.springframework.org/tags/form" %>
                 </div>
                 <div class="d-grid">
                   <button type="submit" class="btn btn-primary">
-                    Create product
+                    Create Product
                   </button>
                 </div>
-              </form>
+              </form:form>
             </div>
           </div>
         </div>

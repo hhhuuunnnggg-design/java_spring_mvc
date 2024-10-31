@@ -64,6 +64,7 @@ public class UserController {
         if (user != null) {
             modelAndView.addObject("detailUserId", user);
             modelAndView.addObject("userId", id);
+
         } else {
             modelAndView.addObject("errorMessage", "Không tìm thấy người dùng với ID " + id);
         }
@@ -74,7 +75,7 @@ public class UserController {
     @GetMapping("/admin/update/{id}")
     public ModelAndView getUpdateUser(@PathVariable Long id) {
         User userId = this.userService.getUserById(id);
-        System.out.println(userId);
+
         ModelAndView modelAndView = new ModelAndView("admin/user/update"); // ăn theo file của url
         modelAndView.addObject("UpdateUserId", userId);
         modelAndView.addObject("avatarPath", userId.getAvatar()); // Thêm đường dẫn avatar
@@ -86,6 +87,7 @@ public class UserController {
     public ModelAndView postUpdateUser(@ModelAttribute("newUser") User nguyendinhhung,
             @RequestParam("hoidanitFile") MultipartFile file) {
         User CurrentUser = this.userService.getUserById(nguyendinhhung.getId());
+
         String avatarFileName = this.uploadService.handleSaveUploadFile(file, "avatar");
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/user"); // ăn theo file của url
         if (CurrentUser != null) {
@@ -108,18 +110,21 @@ public class UserController {
         return ResponseEntity.ok("User với ID " + id + " đã bị xóa");
     }
 
+    // start create
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.GET)
     public ModelAndView createUserForm() {
         ModelAndView modelAndView = new ModelAndView("admin/user/create");
-        modelAndView.addObject("newUser", new User());
+        modelAndView.addObject("newOneUser", new User());
         return modelAndView;
     }
 
     // bindingResult giúp thông báo lỗi
     // @Valid để validate dữ liệu
     @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
+    // hình như là không cần ModelAttribute ở đây, nhưng cần sử dụng khi validate dữ
+    // liệu
     public ModelAndView createUser(
-            @ModelAttribute("newUser") @Valid User newUser,
+            @ModelAttribute("newOneUser") @Valid User newUser,
             BindingResult bindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
         // Kiểm tra lỗi validate
@@ -144,5 +149,6 @@ public class UserController {
 
         return new ModelAndView("redirect:/admin/user");
     }
+    // end start
 
 }
