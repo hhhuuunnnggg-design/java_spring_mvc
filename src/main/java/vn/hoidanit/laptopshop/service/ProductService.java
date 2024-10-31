@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.hoidanit.laptopshop.entity.Product;
+import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.repository.ProductRepository;
 
 @Service
@@ -15,5 +16,13 @@ public class ProductService {
 
     public List<Product> gethandleAllProducts() {
         return this.productRepository.findAll();
+    }
+
+    public void handleDeleteProductId(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    public Product getProductById(Long id) {
+        return this.productRepository.findById(id).orElse(null);
     }
 }

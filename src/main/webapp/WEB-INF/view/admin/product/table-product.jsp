@@ -48,7 +48,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
 
               <table
                 class="table table-striped table-hover table-bordered"
-                action="/admin/user"
+                action="/admin/product"
               >
                 <thead>
                   <tr>
@@ -61,23 +61,23 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                 </thead>
                 <tbody>
                   <c:forEach
-                    items="${tableListUser}"
-                    var="user"
+                    items="${tableListProduct}"
+                    var="product"
                     varStatus="iteration"
                   >
                     <tr>
-                      <td>${user.id}</td>
-                      <td>${user.email}</td>
-                      <td>${user.fullname}</td>
-                      <td>${user.role.name}</td>
+                      <td>${product.id}</td>
+                      <td>${product.name}</td>
+                      <td>${product.price}</td>
+                      <td>${product.factory}</td>
                       <td>
                         <!-- đây là API -->
-                        <a href="/admin/user/${user.id}"
+                        <a href="/admin/product/${product.id}"
                           ><button type="button" class="btn btn-success">
                             View
                           </button></a
                         >
-                        <a href="/admin/update/${user.id}"
+                        <a href="/admin/product/update/${product.id}"
                           ><button type="button" class="btn btn-warning">
                             Update
                           </button></a
@@ -101,6 +101,26 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
         <jsp:include page="../layout/footer.jsp" />
       </div>
     </div>
+    <!-- <script>
+      function deleteUser(productId) {
+        if (
+          confirm(
+            "Bạn có chắc muốn xóa sản phẩm với ID: " + productId + " không?"
+          )
+        ) {
+          $.ajax({
+            url: "/admin/detele/" + productId,
+            type: "DELETE",
+            success: function (result) {
+              location.reload(); // Tải lại trang để cập nhật danh sách
+            },
+            error: function (err) {
+              alert("Có lỗi xảy ra khi xóa sản phẩm.");
+            },
+          });
+        }
+      }
+    </script> -->
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
       crossorigin="anonymous"

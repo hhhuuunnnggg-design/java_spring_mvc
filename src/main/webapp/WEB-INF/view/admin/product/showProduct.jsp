@@ -1,26 +1,23 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
-uri="http://java.sun.com/jsp/jstl/fmt" %>
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
-<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Detail User</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
     />
-    <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
-    <meta name="author" content="Hỏi Dân IT" />
-    <title>Dashboard - Hỏi Dân IT</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <link href="/css/styles.css" rel="stylesheet" />
-    <script
-      src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-      crossorigin="anonymous"
-    ></script>
   </head>
 
+  <!-- ---------------------------------------------- -->
   <body class="sb-nav-fixed">
     <jsp:include page="../layout/header.jsp" />
     <div id="layoutSidenav">
@@ -29,63 +26,52 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
         <main>
           <div class="container-fluid px-4">
             <h1 class="mt-4">Dashboard</h1>
-            <ol class="breadcrumb mb-4">
-              <li class="breadcrumb-item active">product</li>
+            <ol class="breadcrumb mb-4" style="text-decoration: none">
+              <li class="breadcrumb-item active">
+                <a href="/admin/product">product</a>
+              </li>
+              <li class="breadcrumb-item active">
+                <a href="#">Detail product</a>
+              </li>
             </ol>
           </div>
         </main>
-        <!-- ---------------------------------------------- -->
+
+        <!-- ------------------------ -->
         <div class="container">
           <div class="row">
-            <div class="col-md-6 col-12 mx-auto">
-              <h3>Table product</h3>
+            <div class="col-md-9 col-12 mx-auto">
+              <h3>view prodcut with id: ${productId}</h3>
               <hr />
+              <!-- ---------start table -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">stt</th>
+                    <th scope="col">name</th>
+                    <th scope="col">detaildesc</th>
+                    <th scope="col">quantity</th>
+                    <th scope="col">price</th>
+                    <th scope="col">image</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">${productId}</th>
+                    <td>${detailproductId.name}</td>
+                    <td>${detailproductId.detaildesc}</td>
+                    <td>${detailproductId.quantity}</td>
+                    <td>${detailproductId.price}</td>
+                    <td>${detailproductId.image}</td>
+                  </tr>
+                </tbody>
+              </table>
 
-              <form
-                method="post"
-                action="/admin/user/create"
-                modelAttribute="detailUserId"
-              >
-                <div class="mb-3">
-                  <label for="exampleInputEmail1" class="form-label"
-                    >Email</label
-                  >
-                  <input
-                    type="email"
-                    class="form-control"
-                    path="email"
-                    aria-describedby="emailHelp"
-                  />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPassword1" class="form-label"
-                    >Password</label
-                  >
-                  <input type="password" class="form-control" path="password" />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputPhone" class="form-label"
-                    >PhoneNumber</label
-                  >
-                  <input type="text" class="form-control" path="phone" />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputFullName" class="form-label"
-                    >FullName</label
-                  >
-                  <input type="text" class="form-control" path="fullname" />
-                </div>
-                <div class="mb-3">
-                  <label for="exampleInputAddress" class="form-label"
-                    >Address</label
-                  >
-                  <input type="text" class="form-control" path="adress" />
-                </div>
-                <a href=""><button class="btn btn-primary">back</button></a>
-              </form>
+              <!-- ---------end table------- -->
             </div>
           </div>
         </div>
+        <!-- ----------end -------- -->
         <jsp:include page="../layout/footer.jsp" />
       </div>
     </div>
