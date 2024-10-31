@@ -1,5 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %>
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/fmt" %> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +41,25 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <!-- Template Stylesheet -->
     <link href="/client/css/style.css" rel="stylesheet" />
     <!-- end template -->
+    <script>
+      $(document).ready(() => {
+
+
+        const orgImage="${UpdateProductId.image}"
+        if(orgImage){
+          const urlImage="/images/product/"+orgImage;
+
+          $("#avatarPreview").attr("src",urlImage);
+          $("#avatarPreview").css("display","block");
+        }
+        <!-- ---------khúc trên sẽ tự động load ảnh ra giao diện-------- -->
+
+        $("#avatarFile").change(function (e) {
+          const imgURL = URL.createObjectURL(e.target.files[0]);
+          $("#avatarPreview").attr("src", imgURL).css("display", "block");
+        });
+      });
+    </script>
   </head>
 
   <body>
@@ -115,7 +136,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 <div class="border rounded">
                   <a href="#">
                     <img
-                      src="/client/img/single-item.jpg"
+                      src="/images/product/${Product.image}"
                       class="img-fluid rounded"
                       alt="Image"
                     />
@@ -123,9 +144,12 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 </div>
               </div>
               <div class="col-lg-6">
-                <h4 class="fw-bold mb-3">Brocoli</h4>
-                <p class="mb-3">Category: Vegetables</p>
-                <h5 class="fw-bold mb-3">3,35 $</h5>
+                <h4 class="fw-bold mb-3">${Product.name}</h4>
+                <p class="mb-3">${Product.factory}</p>
+                <h5 class="fw-bold mb-3">
+                  <!-- đây là cách chuyển đổi đơn vị tiền tệ -->
+                  <fmt:formatNumber type="number" value="${Product.price}" />vnđ
+                </h5>
                 <div class="d-flex mb-4">
                   <i class="fa fa-star text-secondary"></i>
                   <i class="fa fa-star text-secondary"></i>
@@ -133,15 +157,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                   <i class="fa fa-star text-secondary"></i>
                   <i class="fa fa-star"></i>
                 </div>
-                <p class="mb-4">
-                  The generated Lorem Ipsum is therefore always free from
-                  repetition injected humour, or non-characteristic words etc.
-                </p>
-                <p class="mb-4">
-                  Susp endisse ultricies nisi vel quam suscipit. Sabertooth
-                  peacock flounder; chain pickerel hatchetfish, pencilfish
-                  snailfish
-                </p>
+                <p class="mb-4">${Product.shortdesc}</p>
+
                 <div class="input-group quantity mb-5" style="width: 100px">
                   <div class="input-group-btn">
                     <button
@@ -185,18 +202,6 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                     >
                       Description
                     </button>
-                    <button
-                      class="nav-link border-white border-bottom-0"
-                      type="button"
-                      role="tab"
-                      id="nav-mission-tab"
-                      data-bs-toggle="tab"
-                      data-bs-target="#nav-mission"
-                      aria-controls="nav-mission"
-                      aria-selected="false"
-                    >
-                      Reviews
-                    </button>
                   </div>
                 </nav>
                 <div class="tab-content mb-5">
@@ -206,17 +211,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                     role="tabpanel"
                     aria-labelledby="nav-about-tab"
                   >
-                    <p>
-                      The generated Lorem Ipsum is therefore always free from
-                      repetition injected humour, or non-characteristic words
-                      etc. Susp endisse ultricies nisi vel quam suscipit
-                    </p>
-                    <p>
-                      Sabertooth peacock flounder; chain pickerel hatchetfish,
-                      pencilfish snailfish filefish Antarctic icefish goldeye
-                      aholehole trumpetfish pilot fish airbreathing catfish,
-                      electric ray sweeper.
-                    </p>
+                    <p>${Product.detaildesc}</p>
+
                     <div class="px-2">
                       <div class="row g-4">
                         <div class="col-6">
@@ -274,71 +270,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                       </div>
                     </div>
                   </div>
-                  <div
-                    class="tab-pane"
-                    id="nav-mission"
-                    role="tabpanel"
-                    aria-labelledby="nav-mission-tab"
-                  >
-                    <div class="d-flex">
-                      <img
-                        src="/client/img/avatar.jpg"
-                        class="img-fluid rounded-circle p-3"
-                        style="width: 100px; height: 100px"
-                        alt=""
-                      />
-                      <div class="">
-                        <p class="mb-2" style="font-size: 14px">
-                          April 12, 2024
-                        </p>
-                        <div class="d-flex justify-content-between">
-                          <h5>Jason Smith</h5>
-                          <div class="d-flex mb-3">
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star"></i>
-                          </div>
-                        </div>
-                        <p>
-                          The generated Lorem Ipsum is therefore always free
-                          from repetition injected humour, or non-characteristic
-                          words etc. Susp endisse ultricies nisi vel quam
-                          suscipit
-                        </p>
-                      </div>
-                    </div>
-                    <div class="d-flex">
-                      <img
-                        src="/client/img/avatar.jpg"
-                        class="img-fluid rounded-circle p-3"
-                        style="width: 100px; height: 100px"
-                        alt=""
-                      />
-                      <div class="">
-                        <p class="mb-2" style="font-size: 14px">
-                          April 12, 2024
-                        </p>
-                        <div class="d-flex justify-content-between">
-                          <h5>Sam Peters</h5>
-                          <div class="d-flex mb-3">
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star text-secondary"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                          </div>
-                        </div>
-                        <p class="text-dark">
-                          The generated Lorem Ipsum is therefore always free
-                          from repetition injected humour, or non-characteristic
-                          words etc. Susp endisse ultricies nisi vel quam
-                          suscipit
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+
                   <div class="tab-pane" id="nav-vision" role="tabpanel">
                     <p class="text-dark">
                       Tempor erat elitr rebum at clita. Diam dolor diam ipsum et

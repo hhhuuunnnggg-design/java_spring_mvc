@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %> <%@ taglib prefix="c"
-uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="fmt"
+uri="http://java.sun.com/jsp/jstl/core" %> <%@ taglib prefix="form"
+uri="http://www.springframework.org/tags/form" %> <%@ taglib prefix="fmt"
 uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <!DOCTYPE html>
@@ -57,6 +58,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Factory</th>
+                    <th scope="col">Image</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
@@ -69,8 +71,24 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                     <tr>
                       <td>${product.id}</td>
                       <td>${product.name}</td>
-                      <td>${product.price}</td>
+                      <td>
+                        <fmt:formatNumber
+                          type="number"
+                          value="${product.price}"
+                        />vnđ
+                      </td>
                       <td>${product.factory}</td>
+                      <td>
+                        <div class="mb-3">
+                          <img
+                            src="/images/product/${product.image}"
+                            width="100"
+                            alt="Avatar Preview"
+                            style="display: ${product.image != null ? 'block' : 'none'}"
+                          />
+                        </div>
+                      </td>
+
                       <td>
                         <!-- đây là API -->
                         <a href="/admin/product/${product.id}"

@@ -113,8 +113,13 @@ uri="http://www.springframework.org/tags/form" %>
                       <label for="factory" class="form-label">Factory:</label>
                       <form:select path="factory" cssClass="form-select">
                         <form:option value="" label="Select Factory" />
-                        <form:option value="Tân Châu" label="Tân Châu" />
-                        <form:option value="Tân Hiệp" label="Tân Hiệp" />
+                        <form:option value="Dell" label="Dell" />
+                        <form:option value="HP" label="HP" />
+                        <form:option value="Lenovo" label="Lenovo" />
+                        <form:option value="Apple" label="Apple" />
+                        <form:option value="Asus" label="Asus" />
+                        <form:option value="Acer" label="Acer" />
+                        <form:option value="Samsung" label="Samsung" />
                       </form:select>
                     </div>
                   </div>

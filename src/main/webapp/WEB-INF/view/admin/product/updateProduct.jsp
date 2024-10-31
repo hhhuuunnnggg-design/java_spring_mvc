@@ -96,7 +96,11 @@ uri="http://www.springframework.org/tags/form" %>
                       <label for="shortdesc" class="form-label"
                         >Short Description</label
                       >
-                      <form:input path="shortdesc" class="form-control" />
+                      <form:input
+                        path="shortdesc"
+                        class="form-control"
+                        type="textarea"
+                      />
                     </div>
                   </div>
                   <div class="col">

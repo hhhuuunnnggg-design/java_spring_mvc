@@ -18,6 +18,17 @@ uri="http://www.springframework.org/tags/form" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       $(document).ready(() => {
+
+
+        const orgImage="${UpdateProductId.image}"
+        if(orgImage){
+          const urlImage="/images/product/"+orgImage;
+
+          $("#avatarPreview").attr("src",urlImage);
+          $("#avatarPreview").css("display","block");
+        }
+        <!-- ---------khúc trên sẽ tự động load ảnh ra giao diện-------- -->
+
         $("#avatarFile").change(function (e) {
           const imgURL = URL.createObjectURL(e.target.files[0]);
           $("#avatarPreview").attr("src", imgURL).css("display", "block");
@@ -55,7 +66,6 @@ uri="http://www.springframework.org/tags/form" %>
 
               <form:form
                 method="post"
-                action="/admin/user/create"
                 modelAttribute="UpdateUserId"
                 enctype="multipart/form-data"
               >
@@ -140,11 +150,10 @@ uri="http://www.springframework.org/tags/form" %>
                 </div>
                 <div class="mb-3">
                   <img
-                    src="${avatarPath}"
+                    src=""
                     id="avatarPreview"
-                    width="120"
+                    width="420"
                     style="display: none"
-                    part="avatar"
                     alt="Avatar Preview"
                   />
                 </div>

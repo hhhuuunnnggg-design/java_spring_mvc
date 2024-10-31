@@ -50,6 +50,7 @@ public class ProductController {
         // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
         String avatarFileName = this.uploadService.handleSaveUploadFile(file, "product");
         newProduct.setImage(avatarFileName);
+        newProduct.setSold(0L);
         this.productService.handleSaveProduct(newProduct);
         return new ModelAndView("redirect:/admin/product");
     }
