@@ -37,50 +37,77 @@ uri="http://www.springframework.org/tags/form" %>
                       <div class="row mb-3">
                         <div class="col-md-6">
                           <div class="form-floating mb-3 mb-md-0">
+                            <c:set var="errorFirtName">
+                              <form:errors
+                                path="firstName"
+                                cssClass="invalid-feedback"
+                              />
+                            </c:set>
                             <form:input
-                              class="form-control"
+                              class="form-control ${not empty errorFirtName ? 'is-invalid' : ''}"
                               id="inputFirstName"
                               type="text"
                               placeholder="Enter your first name"
                               path="firstName"
                             />
+                            ${errorFirtName}
                             <label for="inputFirstName">First name</label>
                           </div>
                         </div>
                         <div class="col-md-6">
                           <div class="form-floating">
+                            <c:set var="errorLastName">
+                              <form:errors
+                                path="lastName"
+                                cssClass="invalid-feedback"
+                              />
+                            </c:set>
                             <form:input
-                              class="form-control"
+                              class="form-control ${not empty errorLastName ? 'is-invalid' : ''}"
                               id="inputLastName"
                               type="text"
                               placeholder="Enter your last name"
                               path="lastName"
                             />
-
+                            ${errorLastName}
                             <label for="inputLastName">Last name</label>
                           </div>
                         </div>
                       </div>
                       <div class="form-floating mb-3">
+                        <c:set var="errorEmail">
+                          <form:errors
+                            path="email"
+                            cssClass="invalid-feedback"
+                          />
+                        </c:set>
                         <form:input
-                          class="form-control"
+                          class="form-control ${not empty errorEmail ? 'is-invalid' : ''}"
                           id="inputEmail"
                           type="email"
                           placeholder="name@example.com"
                           path="email"
                         />
+                        ${errorEmail}
                         <label for="inputEmail">Email address</label>
                       </div>
                       <div class="row mb-3">
                         <div class="col-md-6">
                           <div class="form-floating mb-3 mb-md-0">
+                            <c:set var="errorPassWord">
+                              <form:errors
+                                path="passWord"
+                                cssClass="invalid-feedback"
+                              />
+                            </c:set>
                             <form:input
-                              class="form-control"
+                              class="form-control ${not empty errorPassWord ? 'is-invalid' : ''}"
                               id="inputPassword"
                               type="password"
                               placeholder="Create a password"
                               path="passWord"
                             />
+                            ${errorPassWord}
                             <label for="inputPassword">Password</label>
                           </div>
                         </div>

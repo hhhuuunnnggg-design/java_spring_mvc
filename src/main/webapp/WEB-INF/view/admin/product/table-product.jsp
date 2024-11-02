@@ -71,6 +71,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                     <tr>
                       <td>${product.id}</td>
                       <td>${product.name}</td>
+                      <!-- đây là format vnd -->
                       <td>
                         <fmt:formatNumber
                           type="number"

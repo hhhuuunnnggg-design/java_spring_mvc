@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,8 +47,14 @@ public class HomePageController {
     @PostMapping("/register")
     public ModelAndView postregister(@ModelAttribute("newregister") @Valid RegisterDTO registerDTO,
             BindingResult bindingResult) {
+        // start xuất lỗi
+        List<FieldError> errors = bindingResult.getFieldErrors();
+        for (FieldError error : errors) {
+            System.out.println(error.getField() + " - " + error.getDefaultMessage());
+        }
+        // end xuất lỗi
         if (bindingResult.hasErrors()) {
-            return new ModelAndView("/register");
+            return new ModelAndView("client/auth/register");
         }
         if (registerDTO.getPassWord().equals(registerDTO.getConfirmPassWord()) && registerDTO.getPassWord() != ""
                 && registerDTO.getConfirmPassWord() != "") {

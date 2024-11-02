@@ -55,7 +55,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                     <th scope="col">ID</th>
                     <th scope="col">Email</th>
                     <th scope="col">FullName</th>
-                    <th scope="col">Role123</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Action</th>
                   </tr>
                 </thead>
