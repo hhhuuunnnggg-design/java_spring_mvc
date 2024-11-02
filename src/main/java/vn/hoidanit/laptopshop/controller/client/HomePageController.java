@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.entity.Product;
+import vn.hoidanit.laptopshop.entity.Role;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.entity.dto.RegisterDTO;
 import vn.hoidanit.laptopshop.service.ProductService;
@@ -48,21 +49,23 @@ public class HomePageController {
         if (bindingResult.hasErrors()) {
             return new ModelAndView("/register");
         }
-        if (registerDTO.getPassWord().equals(registerDTO.getConfirmPassWord())) {
+        if (registerDTO.getPassWord().equals(registerDTO.getConfirmPassWord()) && registerDTO.getPassWord() != ""
+                && registerDTO.getConfirmPassWord() != "") {
             System.out.println("nhập đúng regisster");
             User user = new User();
             user.setFullname(registerDTO.getFirstName() + " " + registerDTO.getLastName());
             user.setEmail(registerDTO.getEmail());
             user.setPassword(registerDTO.getPassWord());
-            user.setRole(2);
+            Role role = new Role();
+            role.setId(2L);
+            user.setRole(role);
             this.userService.handleSaveUser(user);
-
-            return new ModelAndView("/login");
+            return new ModelAndView("redirect:/login");
         } else {
             System.out.println("nhập sai confispasswword");
+            return new ModelAndView("redirect:/register");
         }
 
-        return new ModelAndView("redirect:/register");
     }
 
     @GetMapping("/login")

@@ -56,6 +56,7 @@ uri="http://www.springframework.org/tags/form" %>
                               placeholder="Enter your last name"
                               path="lastName"
                             />
+
                             <label for="inputLastName">Last name</label>
                           </div>
                         </div>
@@ -100,14 +101,12 @@ uri="http://www.springframework.org/tags/form" %>
                       </div>
                       <div class="mt-4 mb-0">
                         <div class="d-grid">
-                          <a class="btn btn-primary btn-block" href="#"
-                            ><button
-                              type="submit"
-                              class="btn btn-primary btn-block"
-                            >
-                              Create Account
-                            </button>
-                          </a>
+                          <button
+                            type="submit"
+                            class="btn btn-primary btn-block"
+                          >
+                            Create Account
+                          </button>
                         </div>
                       </div>
                     </form:form>
