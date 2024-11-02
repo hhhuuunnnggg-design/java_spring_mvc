@@ -26,13 +26,15 @@ public class User {
     private String email;
 
     @NotNull
-    @Size(min = 2, message = "Password phải có ít nhất 2 ký tự")
+    @Size(min = 5, message = "Password phải có ít nhất 5 ký tự")
     private String password;
 
     @NotNull
-    @Size(min = 2, message = "Họ tên phải có ít nhất 2 ký tự")
+    @Size(min = 5, message = "Họ tên phải có ít nhất 5 ký tự")
     private String fullname;
+
     private String adress;
+
     private String phone;
     private String avatar;
     // role id

@@ -94,19 +94,26 @@ uri="http://www.springframework.org/tags/form" %>
                       <label for="phone" class="form-label">Phone Number</label>
                       <form:input
                         type="number"
-                        class="form-control"
+                        class="form-control }"
                         path="phone"
                       />
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
+                      <c:set var="errorFullName">
+                        <form:errors
+                          path="fullname"
+                          cssClass="invalid-feedback"
+                        />
+                      </c:set>
                       <label for="fullname" class="form-label">Full Name</label>
                       <form:input
                         type="text"
-                        class="form-control"
+                        class="form-control ${not empty errorFullName ? 'is-invalid' : ''}"
                         path="fullname"
                       />
+                      ${errorFullName}
                     </div>
                   </div>
                 </div>

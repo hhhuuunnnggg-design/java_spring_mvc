@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.entity.Product;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UploadService;
@@ -38,14 +41,26 @@ public class ProductController {
     // thêm (chưa xong)
     @GetMapping("/admin/product/create")
     public ModelAndView createProductForm() {
-        ModelAndView modelAndView = new ModelAndView("admin/product/createProduct"); // vewname là đường link dẫ đến jsp
+        ModelAndView modelAndView = new ModelAndView("admin/product/createProduct"); // viewname là đường link dẫn đến
+                                                                                     // jsp
         modelAndView.addObject("newOneProduct", new Product());
         return modelAndView;
     }
 
     @PostMapping("/admin/product/create")
-    public ModelAndView createProduct(@ModelAttribute("newOneProduct") Product newProduct,
+    public ModelAndView createProduct(@Valid @ModelAttribute("newOneProduct") Product newProduct,
+            BindingResult bindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
+        // xuất lỗi
+        List<FieldError> err = bindingResult.getFieldErrors();
+        for (FieldError listerr : err) {
+            System.out.println(listerr.getField() + " - " + listerr.getDefaultMessage());
+        }
+
+        // Kiểm tra lỗi
+        if (bindingResult.hasErrors()) {
+            return new ModelAndView("admin/product/createProduct"); // Trả về view chứa form với lỗi
+        }
 
         // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
         String avatarFileName = this.uploadService.handleSaveUploadFile(file, "product");

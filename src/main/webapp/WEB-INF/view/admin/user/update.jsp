@@ -18,12 +18,9 @@ uri="http://www.springframework.org/tags/form" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
       $(document).ready(() => {
-
-
-        const orgImage="${UpdateProductId.image}"
+        const orgImage="${UpdateUserId.avatar}"
         if(orgImage){
-          const urlImage="/images/product/"+orgImage;
-
+          const urlImage="/images/avatar/"+orgImage;
           $("#avatarPreview").attr("src",urlImage);
           $("#avatarPreview").css("display","block");
         }

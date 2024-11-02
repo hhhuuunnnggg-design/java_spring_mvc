@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,16 +38,6 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    // @RequestMapping("/")
-    // public ModelAndView getHelloPage() {
-    // List<User> arrUsers =
-    // this.userService.getAllUsersByEmail("lceo7093@gmail.com");
-    // ModelAndView modelAndView = new ModelAndView("hello");
-    // String test = this.userService.handleHello();
-    // modelAndView.addObject("eric", test);
-    // return modelAndView;
-    // }
 
     @RequestMapping("/admin/user")
     public ModelAndView getUserPage() {
@@ -81,27 +72,26 @@ public class UserController {
         return modelAndView;
     }
 
-    // @PostMapping("/admin/update/{id}")
-    // public ModelAndView postUpdateUser(@ModelAttribute("newUser") User
-    // nguyendinhhung,
-    // @RequestParam("hoidanitFile") MultipartFile file) {
-    // User CurrentUser = this.userService.getUserById(nguyendinhhung.getId());
+    @PostMapping("/admin/user/update/{id}")
+    public ModelAndView postUpdateUser(@ModelAttribute("newUser") User nguyendinhhung,
+            @RequestParam("hoidanitFile") MultipartFile file) {
+        User CurrentUser = this.userService.getUserById(nguyendinhhung.getId());
 
-    // String avatarFileName = this.uploadService.handleSaveUploadFile(file,
-    // "avatar");
-    // ModelAndView modelAndView = new ModelAndView("redirect:/admin/user"); // ăn
-    // theo file của url
-    // if (CurrentUser != null) {
-    // CurrentUser.setEmail(nguyendinhhung.getEmail());
-    // CurrentUser.setFullname(nguyendinhhung.getFullname());
-    // CurrentUser.setAdress(nguyendinhhung.getAdress());
-    // CurrentUser.setPhone(nguyendinhhung.getPhone());
-    // CurrentUser.setPassword(nguyendinhhung.getPassword());
-    // CurrentUser.setAvatar(avatarFileName);
-    // this.userService.handleSaveUser(CurrentUser);
-    // }
-    // return modelAndView;
-    // }
+        String avatarFileName = this.uploadService.handleSaveUploadFile(file,
+                "avatar");
+        ModelAndView modelAndView = new ModelAndView("redirect:/admin/user");
+        // ăn theo file của url
+        if (CurrentUser != null) {
+            CurrentUser.setEmail(nguyendinhhung.getEmail());
+            CurrentUser.setFullname(nguyendinhhung.getFullname());
+            CurrentUser.setAdress(nguyendinhhung.getAdress());
+            CurrentUser.setPhone(nguyendinhhung.getPhone());
+            CurrentUser.setPassword(nguyendinhhung.getPassword());
+            CurrentUser.setAvatar(avatarFileName);
+            this.userService.handleSaveUser(CurrentUser);
+        }
+        return modelAndView;
+    }
     // end update
 
     // start delete

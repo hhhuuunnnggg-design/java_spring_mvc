@@ -77,7 +77,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                             View
                           </button></a
                         >
-                        <a href="/admin/update/${user.id}"
+                        <a href="/admin/user/update/${user.id}"
                           ><button type="button" class="btn btn-warning">
                             Update
                           </button></a

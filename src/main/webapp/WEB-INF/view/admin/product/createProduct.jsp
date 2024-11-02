@@ -54,18 +54,30 @@ uri="http://www.springframework.org/tags/form" %>
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
-                      <label for="name" class="form-label">Name</label>
-                      <form:input path="name" class="form-control" />
+                      <c:set var="errorNameProduct">
+                        <form:errors path="name" cssClass="invalid-feedback" />
+                      </c:set>
+                      <label for="name" class="form-label">Name Product</label>
+                      <form:input
+                        type="text"
+                        path="name"
+                        class="form-control ${not empty errorNameProduct ? 'is-invalid' : ''}"
+                      />
+                      ${errorNameProduct}
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
+                      <c:set var="errorPrice">
+                        <form:errors path="price" cssClass="invalid-feedback" />
+                      </c:set>
                       <label for="price" class="form-label">Price</label>
                       <form:input
                         path="price"
                         type="number"
-                        class="form-control"
+                        class="form-control ${not empty errorPrice ? 'is-invalid' : ''}"
                       />
+                      ${errorPrice}
                     </div>
                   </div>
                 </div>
@@ -73,35 +85,59 @@ uri="http://www.springframework.org/tags/form" %>
                 <!-- ---------------------- -->
 
                 <div class="mb-3">
+                  <c:set var="errorDetaildesc">
+                    <form:errors
+                      path="detaildesc"
+                      cssClass="invalid-feedback"
+                    />
+                  </c:set>
                   <label for="detaildesc" class="form-label"
                     >Detail Description:</label
                   >
                   <form:textarea
                     path="detaildesc"
-                    class="form-control"
+                    class="form-control ${not empty errorDetaildesc ? 'is-invalid' : ''}"
                     rows="4"
                     style="resize: vertical"
                   ></form:textarea>
+                  ${errorDetaildesc}
                 </div>
 
                 <!-- ------------------- -->
                 <div class="row">
                   <div class="col">
                     <div class="mb-3">
+                      <c:set var="errorShortdesc">
+                        <form:errors
+                          path="detaildesc"
+                          cssClass="invalid-feedback"
+                        />
+                      </c:set>
                       <label for="shortdesc" class="form-label"
                         >Short Description</label
                       >
-                      <form:input path="shortdesc" class="form-control" />
+                      <form:input
+                        path="shortdesc"
+                        class="form-control ${not empty errorShortdesc ? 'is-invalid' : ''}"
+                      />
+                      ${errorShortdesc}
                     </div>
                   </div>
                   <div class="col">
                     <div class="mb-3">
+                      <c:set var="errorQuantity">
+                        <form:errors
+                          path="quantity"
+                          cssClass="invalid-feedback"
+                        />
+                      </c:set>
                       <label for="quantity" class="form-label">Quantity</label>
                       <form:input
                         path="quantity"
                         type="number"
-                        class="form-control"
+                        class="form-control ${not empty errorQuantity ? 'is-invalid' : ''}"
                       />
+                      ${errorQuantity}
                     </div>
                   </div>
                 </div>
