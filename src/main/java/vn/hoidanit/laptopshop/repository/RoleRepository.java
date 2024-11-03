@@ -8,4 +8,7 @@ import vn.hoidanit.laptopshop.entity.Role;
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
     Optional<Role> findById(Long id);
+
+    Role findByName(String name);
+
 }

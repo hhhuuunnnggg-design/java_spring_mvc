@@ -3,6 +3,7 @@ package vn.hoidanit.laptopshop.controller.client;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -27,6 +28,9 @@ public class HomePageController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
     public ModelAndView getHomePage() {
@@ -62,7 +66,9 @@ public class HomePageController {
             User user = new User();
             user.setFullname(registerDTO.getFirstName() + " " + registerDTO.getLastName());
             user.setEmail(registerDTO.getEmail());
-            user.setPassword(registerDTO.getPassWord());
+            String hashPassword = this.passwordEncoder.encode(registerDTO.getPassWord());
+            user.setPassword(hashPassword);
+
             Role role = new Role();
             role.setId(2L);
             user.setRole(role);

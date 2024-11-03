@@ -5,13 +5,18 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import vn.hoidanit.laptopshop.entity.Role;
 import vn.hoidanit.laptopshop.entity.User;
+import vn.hoidanit.laptopshop.repository.RoleRepository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
 
     public String handleHello() {
         return "Hello from service";
@@ -35,5 +40,9 @@ public class UserService {
 
     public void handleDeleteUserId(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public Role getRoleByName(String name) {
+        return this.roleRepository.findByName(name);
     }
 }
