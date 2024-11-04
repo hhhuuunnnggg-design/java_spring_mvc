@@ -1,26 +1,24 @@
 package vn.hoidanit.laptopshop.entity.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import vn.hoidanit.laptopshop.service.validator.RegisterChecked;
 
+@RegisterChecked
 public class RegisterDTO {
 
-    @NotNull(message = "tên không được để trống")
-    @Size(min = 1, message = "tên phải trên 1 ký tự")
+    @Size(min = 3, message = "FirstName phải có tối thiểu 3 ký tự")
     private String firstName;
 
-    @NotNull(message = "Họ không được để trống")
-    @Size(min = 3, message = "Họ phải trên 3 ký tự")
     private String lastName;
 
-    @NotNull(message = "Email không đưuọc để trống")
-    @Size(min = 10, message = "phải có tối đa 10 ký tự")
+    @Email(message = "Email không hợp lệ", regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
     private String email;
 
-    @NotNull
-    @Size(min = 5, message = "passWord phải trên 5 ký tự")
-    private String passWord;
-    private String confirmPassWord;
+    private String password;
+
+    @Size(min = 3, message = "confirmPassword phải có tối thiểu 3 ký tự")
+    private String confirmPassword;
 
     public String getFirstName() {
         return firstName;
@@ -46,26 +44,26 @@ public class RegisterDTO {
         this.email = email;
     }
 
-    public String getPassWord() {
-        return passWord;
+    public String getConfirmPassword() {
+        return confirmPassword;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
-    public String getConfirmPassWord() {
-        return confirmPassWord;
+    public String getPassword() {
+        return password;
     }
 
-    public void setConfirmPassWord(String confirmPassWord) {
-        this.confirmPassWord = confirmPassWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return "RegisterDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", passWord="
-                + passWord + ", confirmPassWord=" + confirmPassWord + "]";
+        return "RegisterDTO [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", password="
+                + password + ", confirmPassword=" + confirmPassword + "]";
     }
 
 }

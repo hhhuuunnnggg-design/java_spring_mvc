@@ -61,7 +61,7 @@ public class HomePageController {
         }
 
         User user = this.userService.registerDTOtoUser(registerDTO);
-        String hashPassword = this.passwordEncoder.encode(registerDTO.getPassWord());
+        String hashPassword = this.passwordEncoder.encode(registerDTO.getPassword());
         user.setPassword(hashPassword);
 
         this.userService.handleSaveUser(user);

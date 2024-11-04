@@ -10,6 +10,7 @@ import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 @Constraint(validatedBy = RegisterValidator.class)
+// TYPE: phạm vi hoạt động là cả class
 @Target({ ElementType.TYPE }) // Adjusted to apply to the class level
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
