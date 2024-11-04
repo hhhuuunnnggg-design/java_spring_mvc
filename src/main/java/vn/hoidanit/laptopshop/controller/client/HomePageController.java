@@ -75,4 +75,10 @@ public class HomePageController {
         return modelAndView;
     }
 
+    @GetMapping("/access-deny")
+    public ModelAndView getDenyPage() {
+        ModelAndView modelAndView = new ModelAndView("client/auth/deny");
+        return modelAndView;
+    }
+
 }

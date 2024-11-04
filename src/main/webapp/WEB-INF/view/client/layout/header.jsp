@@ -44,19 +44,15 @@ uri="http://java.sun.com/jsp/jstl/core" %>
       >
         <span class="fa fa-bars text-primary"></span>
       </button>
-      <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
-        <div class="navbar-nav mx-auto">
+      <div
+        class="collapse navbar-collapse bg-white justify-content-between mx-5"
+        id="navbarCollapse"
+      >
+        <div class="navbar-nav">
           <a href="index.html" class="nav-item nav-link active">Trang Chủ</a>
           <a href="product/5" class="nav-item nav-link">Sản Phẩm</a>
         </div>
         <div class="d-flex m-3 me-0">
-          <button
-            class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4"
-            data-bs-toggle="modal"
-            data-bs-target="#searchModal"
-          >
-            <i class="fas fa-search text-primary"></i>
-          </button>
           <a href="#" class="position-relative me-4 my-auto">
             <i class="fa fa-shopping-bag fa-2x"></i>
             <span
@@ -65,9 +61,65 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               >3</span
             >
           </a>
-          <a href="#" class="my-auto">
-            <i class="fas fa-user fa-2x"></i>
-          </a>
+          <div class="dropdown my-auto">
+            <a
+              href="#"
+              class="dropdown"
+              role="button"
+              id="dropdownMenuLink"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fas fa-user fa-2x"></i>
+            </a>
+
+            <ul
+              class="dropdown-menu dropdown-menu-end p-4"
+              aria-labelledby="dropdownMenuLink"
+            >
+              <li
+                class="d-flex align-items-center flex-column"
+                style="min-width: 300px"
+              >
+                <img
+                  style="
+                    width: 150px;
+                    height: 150px;
+                    border-radius: 50%;
+                    overflow: hidden;
+                  "
+                  src="/images/product/1711078092373-asus-01.png"
+                />
+                <div class="text-center my-3">
+                  <!-- check để hiển thị tên đăng nhập -->
+                  <c:if test="${not empty pageContext.request.userPrincipal}">
+                    User
+                    <c:out value="${pageContext.request.userPrincipal.name}" />
+                  </c:if>
+                </div>
+              </li>
+
+              <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
+
+              <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+              <li>
+                <hr class="dropdown-divider" />
+              </li>
+              <li>
+                <form method="post" action="/logout">
+                  <!-- đây chính là csrf là đk cần -->
+                  <input
+                    type="hidden"
+                    name="${_csrf.parameterName}"
+                    value="${_csrf.token}"
+                  />
+                  <button class="dropdown-item">Đăng xuất</button>
+                </form>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </nav>
