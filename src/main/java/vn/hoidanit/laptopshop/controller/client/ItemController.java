@@ -37,7 +37,7 @@ public class ItemController {
         HttpSession session = request.getSession(false);
         Long productId = id;
         String email = (String) session.getAttribute("email");
-        this.productService.handelAddProductToCart(email, productId);
+        this.productService.handelAddProductToCart(email, productId, session);
 
         ModelAndView modelAndView = new ModelAndView("redirect:/");
         return modelAndView;

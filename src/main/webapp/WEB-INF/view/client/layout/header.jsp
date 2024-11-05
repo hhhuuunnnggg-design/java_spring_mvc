@@ -59,7 +59,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               <span
                 class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
                 style="top: -5px; left: 15px; height: 20px; min-width: 20px"
-                >3</span
+                >${sessionScope.sum}</span
               >
             </a>
             <div class="dropdown my-auto">

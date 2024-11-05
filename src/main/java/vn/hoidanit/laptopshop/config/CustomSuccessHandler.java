@@ -17,6 +17,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vn.hoidanit.laptopshop.entity.Cart;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.service.UserService;
 
@@ -47,23 +48,38 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     // Xóa các thuộc tính xác thực và thêm thông tin người dùng vào session
     protected void clearAuthenticationAttributes(HttpServletRequest request, Authentication authentication) {
-        // Lấy session hiện tại (không tạo mới nếu chưa có session)
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return; // Không có session, thoát khỏi hàm
+            return;
         }
-        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION); // Xóa lỗi xác thực nếu có
+        session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
 
         // Lấy email từ đối tượng Authentication
         String email = authentication.getName();
-        // Truy xuất người dùng từ database bằng email
+        // Truy xuất người dùng từ cơ sở dữ liệu bằng email
         User user = this.userService.getUserByEmail(email);
+
         if (user != null) {
-            // Lưu thông tin người dùng vào session để hiển thị sau khi đăng nhập
+            // Kiểm tra nếu người dùng có giỏ hàng hay không
+            Cart cart = user.getCart();
+            if (cart != null) {
+                // Nếu giỏ hàng tồn tại, lưu số lượng giỏ hàng vào session
+                session.setAttribute("cartSum", cart.getSum());
+                session.setAttribute("sum", cart.getSum());
+            } else {
+                // Nếu giỏ hàng không tồn tại, đặt giá trị mặc định cho "cartSum" và "sum"
+                session.setAttribute("cartSum", 0);
+                session.setAttribute("sum", 0);
+            }
+
+            // Lưu thông tin khác của người dùng vào session
             session.setAttribute("fullName", user.getFullname());
             session.setAttribute("avatar", user.getAvatar());
             session.setAttribute("id", user.getId());
             session.setAttribute("email", user.getEmail());
+
+            int sum = user.getCart().getSum();
+            session.setAttribute("sum", sum);
         }
     }
 

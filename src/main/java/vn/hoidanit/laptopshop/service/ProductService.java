@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.entity.Cart;
 import vn.hoidanit.laptopshop.entity.CartDetail;
 import vn.hoidanit.laptopshop.entity.Product;
@@ -44,11 +45,12 @@ public class ProductService {
         return this.productRepository.save(product);
     }
 
-    public void handelAddProductToCart(String email, Long productId) {
+    public void handelAddProductToCart(String email, Long productId, HttpSession session) {
         User user = this.userService.getUserByEmail(email);
         System.out.println(user);
         if (user != null) {
             // Kiểm tra xem người dùng đã có giỏ hàng chưa
+
             Optional<Cart> cartOptional = cartRepository.findByUser(user);
 
             Cart cart;
@@ -56,7 +58,7 @@ public class ProductService {
                 // Tạo mới giỏ hàng
                 Cart newCart = new Cart();
                 newCart.setUser(user);
-                newCart.setSum(1);
+                newCart.setSum(0);
 
                 cart = cartRepository.save(newCart);
             } else {
@@ -66,16 +68,42 @@ public class ProductService {
             // Thêm chi tiết sản phẩm vào giỏ hàng
             Optional<Product> productOptional = productRepository.findById(productId);
             if (productOptional.isPresent()) {
-
                 Product realProduct = productOptional.get();
-                CartDetail cd = new CartDetail();
-                cd.setCart(cart);
-                cd.setProduct(realProduct);
-                cd.setPrice(realProduct.getPrice());
-                cd.setQuantity(1);
 
-                cartDetailRepository.save(cd); // Lưu đối tượng CartDetail thực tế
+                // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+                CartDetail oldCartDetail = cartDetailRepository.findByCartAndProduct(cart, realProduct);
+                if (oldCartDetail == null) {
+                    // Nếu sản phẩm chưa có trong giỏ hàng, thêm sản phẩm mới
+                    CartDetail cd = new CartDetail();
+                    cd.setCart(cart);
+                    cd.setProduct(realProduct);
+                    cd.setPrice(realProduct.getPrice());
+                    cd.setQuantity(1);
+
+                    // Cập nhật tổng số lượng sản phẩm trong giỏ hàng
+                    int newSum = cart.getSum() + 1;
+                    cart.setSum(newSum);
+                    cartRepository.save(cart);
+
+                    // Đặt lại `sum` vào session
+                    session.setAttribute("sum", newSum);
+
+                    cartDetailRepository.save(cd); // Lưu đối tượng CartDetail thực tế
+                } else {
+                    // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng lên 1
+                    oldCartDetail.setQuantity(oldCartDetail.getQuantity() + 1);
+                    cartDetailRepository.save(oldCartDetail); // Cập nhật lại CartDetail
+
+                    // Cập nhật tổng số lượng sản phẩm trong giỏ hàng
+                    int newSum = cart.getSum() + 1;
+                    cart.setSum(newSum);
+                    cartRepository.save(cart);
+
+                    // Đặt lại `sum` vào session
+                    session.setAttribute("sum", newSum);
+                }
             }
         }
     }
+
 }
