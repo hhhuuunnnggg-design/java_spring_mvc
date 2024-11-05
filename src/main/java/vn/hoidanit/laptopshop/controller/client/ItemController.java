@@ -23,4 +23,10 @@ public class ItemController {
         return viewProduct;
     }
 
+    @GetMapping("/cart")
+    public ModelAndView getCartPage() {
+        ModelAndView modelAndView = new ModelAndView("client/cart/showCart");
+        return modelAndView;
+    }
+
 }

@@ -130,7 +130,7 @@ uri="http://www.springframework.org/tags/form" %>
                             <h4>${product.name}</h4>
                             <p>${product.shortdesc}</p>
                             <div
-                              class="d-flex justify-content-between flex-lg-wrap"
+                              class="d-flex justify-content-center flex-lg-wrap"
                             >
                               <p class="text-dark fs-5 fw-bold mb-0">
                                 <fmt:formatNumber
@@ -138,15 +138,25 @@ uri="http://www.springframework.org/tags/form" %>
                                   value="${product.price}"
                                 />vnđ
                               </p>
-                              <a
-                                href="#"
-                                class="btn border border-secondary rounded-pill px-3 text-primary"
+                              <form
+                                action="/add-product-to-cart/${product.id}"
+                                method="post"
                               >
-                                <i
-                                  class="fa fa-shopping-bag me-2 text-primary"
-                                ></i>
-                                Add to cart
-                              </a>
+                                <input
+                                  type="hidden"
+                                  name="${_csrf.parameterName}"
+                                  value="${_csrf.token}"
+                                />
+
+                                <button
+                                  class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"
+                                >
+                                  <i
+                                    class="fa fa-shopping-bag me-2 text-primary"
+                                  ></i>
+                                  Add to cart
+                                </button>
+                              </form>
                             </div>
                           </div>
                         </div>

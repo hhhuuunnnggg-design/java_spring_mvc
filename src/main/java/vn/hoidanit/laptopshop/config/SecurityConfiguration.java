@@ -59,40 +59,58 @@ public class SecurityConfiguration {
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // v6. lamda
+        // Cấu hình bảo mật HTTP với lambdas (giúp mã cấu hình ngắn gọn hơn trong Spring
+        // Security 6+)
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD,
-                                DispatcherType.INCLUDE)
-                        .permitAll() // cho phep tat ca
+                        // Cho phép tất cả các yêu cầu với các loại Dispatcher FORWARD và INCLUDE
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
+                        .permitAll() // Cho phép tất cả người dùng truy cập các tài nguyên được chuyển tiếp hoặc bao
+                                     // gồm bởi servlet
+
+                        // Các endpoint công khai, không cần xác thực
                         .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**", "/images/**")
-                        .permitAll()
-                        // ROLE_ADMIN
+                        .permitAll() // Cho phép truy cập không cần đăng nhập vào các đường dẫn này
+
+                        // Chỉ cho phép người dùng có ROLE_ADMIN truy cập các đường dẫn bắt đầu với
+                        // "/admin/"
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()) // bất kể cái request nào ta cũng cần phải xác thức
 
-                .sessionManagement((sessionManagement) -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-                        .invalidSessionUrl("/logout?expired")
-                        // trong 1 phiên đăng nhập đc tối đa bao nhiêu người đăng nhập ké đc
-                        .maximumSessions(1)
-                        // (false người thứ 2 đăng nhập thì sẽ đá người trước ra) (true người t2 đăng
-                        // nhập r, vẫn phải chờ người 1 logout để ngu2 sd)
-                        .maxSessionsPreventsLogin(false))
-                // đăng xuất ra thì xóa cookie
-                .logout(logout -> logout.deleteCookies("JSESSIONID").invalidateHttpSession(true))
+                        // Yêu cầu xác thực cho tất cả các yêu cầu khác
+                        .anyRequest().authenticated()) // Bất kỳ yêu cầu nào khác đều phải xác thực
 
-                .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
+                // Quản lý phiên đăng nhập
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // Tạo phiên đăng nhập cho mỗi yêu cầu mới
+                        .invalidSessionUrl("/logout?expired") // Chuyển hướng tới URL này khi phiên hết hạn
+
+                        // Cài đặt số lượng phiên tối đa cho mỗi người dùng
+                        .maximumSessions(1) // Mỗi tài khoản chỉ cho phép đăng nhập vào một phiên duy nhất
+                        .maxSessionsPreventsLogin(false)) // Khi người dùng đăng nhập ở thiết bị khác, người đăng nhập
+                                                          // trước sẽ bị đăng xuất
+
+                // Cấu hình đăng xuất
+                .logout(logout -> logout
+                        .deleteCookies("JSESSIONID") // Xóa cookie "JSESSIONID" khi người dùng đăng xuất
+                        .invalidateHttpSession(true)) // Hủy phiên đăng nhập hiện tại khi đăng xuất
+
+                // Cấu hình ghi nhớ đăng nhập
+                .rememberMe(r -> r.rememberMeServices(rememberMeServices())) // Sử dụng dịch vụ ghi nhớ đăng nhập tuỳ
+                                                                             // chỉnh
+
+                // Cấu hình trang đăng nhập
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login")
-                        .failureUrl("/login?error")
-                        // CustomSuccessHandler.java
-                        .successHandler(customSuccessHandler())
-                        .permitAll())
-                // dùng để hiện lỗi 403 khi người đung đổi url tào lao
-                .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"));
+                        .loginPage("/login") // Trang đăng nhập tùy chỉnh
+                        .failureUrl("/login?error") // Chuyển hướng đến URL này khi đăng nhập thất bại
+                        .successHandler(customSuccessHandler()) // Dùng customSuccessHandler để xử lý khi đăng nhập
+                                                                // thành công
+                        .permitAll()) // Cho phép truy cập vào trang đăng nhập mà không cần xác thực
 
-        return http.build();
+                // Xử lý lỗi quyền truy cập
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny")); // Chuyển hướng đến trang này nếu người
+                                                                               // dùng cố truy cập trang không có quyền
+
+        return http.build(); // Xây dựng cấu hình bảo mật
     }
 
 }
