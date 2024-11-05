@@ -46,14 +46,20 @@ public class SecurityConfiguration {
     // remember me, đang cấu hình là 30 ngày
     @Bean
     public SpringSessionRememberMeServices rememberMeServices() {
+        // Tạo một đối tượng SpringSessionRememberMeServices để xử lý chức năng
+        // "Remember Me"
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-        // optionally customize
+
+        // Tùy chọn cài đặt để luôn bật "Remember Me" cho người dùng
         rememberMeServices.setAlwaysRemember(true);
-        return rememberMeServices;
+
+        return rememberMeServices; // Trả về đối tượng rememberMeServices để Spring Security quản lý
     }
 
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
+        // Tạo một đối tượng CustomSuccessHandler để xử lý logic khi đăng nhập thành
+        // công
         return new CustomSuccessHandler();
     }
 

@@ -142,10 +142,12 @@ uri="http://www.springframework.org/tags/form" %>
                                 action="/add-product-to-cart/${product.id}"
                                 method="post"
                               >
+                                <!-- tạo token -->
                                 <input
-                                  type="hidden"
+                                  type="text"
                                   name="${_csrf.parameterName}"
                                   value="${_csrf.token}"
+                                  readonly
                                 />
 
                                 <button

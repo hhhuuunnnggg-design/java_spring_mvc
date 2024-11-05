@@ -14,20 +14,23 @@ import org.springframework.web.servlet.view.JstlView;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
+    // Cấu hình ViewResolver để xử lý các trang JSP
     @Bean
     public ViewResolver viewResolver() {
         final InternalResourceViewResolver bean = new InternalResourceViewResolver();
-        bean.setViewClass(JstlView.class);
-        bean.setPrefix("/WEB-INF/view/");
-        bean.setSuffix(".jsp");
+        bean.setViewClass(JstlView.class); // Sử dụng lớp JstlView để hỗ trợ JSTL trong JSP
+        bean.setPrefix("/WEB-INF/view/"); // Định nghĩa đường dẫn đến thư mục chứa các trang JSP
+        bean.setSuffix(".jsp"); // Định nghĩa đuôi mở rộng của các trang là .jsp
         return bean;
     }
 
+    // Đăng ký ViewResolver để Spring sử dụng
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.viewResolver(viewResolver());
     }
 
+    // Cấu hình đường dẫn các tài nguyên tĩnh như CSS, JavaScript, hình ảnh
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**").addResourceLocations("/resources/css/");
@@ -35,5 +38,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/images/**").addResourceLocations("/resources/images/");
         registry.addResourceHandler("/client/**").addResourceLocations("/resources/client/");
     }
-
 }
