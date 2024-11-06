@@ -1,5 +1,8 @@
 package vn.hoidanit.laptopshop.controller.client;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +12,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import vn.hoidanit.laptopshop.entity.Cart;
+import vn.hoidanit.laptopshop.entity.CartDetail;
 import vn.hoidanit.laptopshop.entity.Product;
+import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.service.ProductService;
 
 @Controller
@@ -27,20 +33,57 @@ public class ItemController {
     }
 
     @GetMapping("/cart")
-    public ModelAndView getCartPage() {
+    public ModelAndView getCartPage(HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("client/cart/showCart");
+        HttpSession session = request.getSession(false);
+        User user = new User();
+        Long userId = (Long) session.getAttribute("id");
+        user.setId(userId);
+
+        Cart cart = this.productService.fetchByUser(user);
+
+        // List<CartDetail> cartDetails = cart.getCartDetails();
+        List<CartDetail> cartDetails = cart == null ? new ArrayList<CartDetail>() : cart.getCartDetails();
+
+        double totalPrice = 0;
+        for (CartDetail cd : cartDetails) {
+            totalPrice += cd.getPrice() * cd.getQuantity();
+        }
+        modelAndView.addObject("cartDetails", cartDetails);
+        modelAndView.addObject("totalPrice", totalPrice);
         return modelAndView;
     }
 
     @PostMapping("/add-product-to-cart/{id}")
     public ModelAndView addProductToCart(@PathVariable Long id, HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        Long productId = id;
-        String email = (String) session.getAttribute("email");
+
+        HttpSession session = request.getSession(false); // Lấy session hiện tại, trả về null nếu session chưa tồn tại
+
+        Long productId = id; // Gán giá trị của {id} từ URL vào biến productId
+
+        String email = (String) session.getAttribute("email"); // Lấy email người dùng từ session (cần thiết cho thao
+                                                               // tác giỏ hàng)
+
+        // Gọi phương thức trong ProductService để thêm sản phẩm vào giỏ hàng
+        // Truyền vào email, productId và session để xử lý
         this.productService.handelAddProductToCart(email, productId, session);
 
+        // Khởi tạo ModelAndView để điều hướng người dùng về trang chủ sau khi thêm sản
+        // phẩm
         ModelAndView modelAndView = new ModelAndView("redirect:/");
-        return modelAndView;
+
+        return modelAndView; // Trả về ModelAndView để chuyển hướng người dùng
     }
+
+    // @PostMapping("/delete-cart-product/{id}")
+    // public ModelAndView deleteCartDetail(@PathVariable Long id,
+    // HttpServletRequest request) {
+    // ModelAndView modelAndView = new ModelAndView("redirect:/cart");
+    // HttpSession session = request.getSession(false);
+    // Long cartDetailId = id;
+    // this.productService.handleRemoveCartDetail(cartDetailId, session);
+
+    // return modelAndView;
+    // }
 
 }

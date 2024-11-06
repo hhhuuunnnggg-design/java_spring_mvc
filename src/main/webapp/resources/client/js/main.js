@@ -56,25 +56,15 @@
     ],
     responsiveClass: true,
     responsive: {
-      0: {
-        items: 1,
-      },
-      576: {
-        items: 1,
-      },
-      768: {
-        items: 1,
-      },
-      992: {
-        items: 2,
-      },
-      1200: {
-        items: 2,
-      },
+      0: { items: 1 },
+      576: { items: 1 },
+      768: { items: 1 },
+      992: { items: 2 },
+      1200: { items: 2 },
     },
   });
 
-  // vegetable carousel
+  // Vegetable carousel
   $(".vegetable-carousel").owlCarousel({
     autoplay: true,
     smartSpeed: 1500,
@@ -89,57 +79,59 @@
     ],
     responsiveClass: true,
     responsive: {
-      0: {
-        items: 1,
-      },
-      576: {
-        items: 1,
-      },
-      768: {
-        items: 2,
-      },
-      992: {
-        items: 3,
-      },
-      1200: {
-        items: 4,
-      },
+      0: { items: 1 },
+      576: { items: 1 },
+      768: { items: 2 },
+      992: { items: 3 },
+      1200: { items: 4 },
     },
   });
 
-  // Modal Video
-  $(document).ready(function () {
-    var $videoSrc;
-    $(".btn-play").click(function () {
-      $videoSrc = $(this).data("src");
+  // Format currency function for Vietnamese Dong
+  function formatCurrency(value) {
+    const formatter = new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
     });
-    console.log($videoSrc);
+    return formatter.format(value);
+  }
 
-    $("#videoModal").on("shown.bs.modal", function (e) {
-      $("#video").attr(
-        "src",
-        $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0"
-      );
+  // Update total cart price function
+  function updateTotalCartPrice() {
+    let total = 0;
+    $(".quantity input").each(function () {
+      const quantity = parseInt($(this).val());
+      const price = parseFloat($(this).data("cart-detail-price"));
+      total += quantity * price;
     });
 
-    $("#videoModal").on("hide.bs.modal", function (e) {
-      $("#video").attr("src", $videoSrc);
-    });
-  });
+    // Update the total price in the UI
+    $(".cart-total-price").text(formatCurrency(total));
+    $(".cart-total-price").attr("data-cart-total-price", total);
+  }
 
-  // Product Quantity
+  // Product Quantity Change Event
   $(".quantity button").on("click", function () {
-    var button = $(this);
-    var oldValue = button.parent().parent().find("input").val();
+    const button = $(this);
+    const input = button.closest(".quantity").find("input");
+    let oldValue = parseInt(input.val());
+
+    // Determine if the button is increment or decrement
     if (button.hasClass("btn-plus")) {
-      var newVal = parseFloat(oldValue) + 1;
+      oldValue += 1;
     } else {
-      if (oldValue > 0) {
-        var newVal = parseFloat(oldValue) - 1;
-      } else {
-        newVal = 0;
-      }
+      oldValue = oldValue > 1 ? oldValue - 1 : 1; // Decrement but not below 1
     }
-    button.parent().parent().find("input").val(newVal);
+
+    input.val(oldValue); // Set new quantity in input
+
+    // Update individual product total price
+    const price = parseFloat(input.data("cart-detail-price"));
+    const productId = input.data("cart-detail-id");
+    const newPrice = price * oldValue;
+    $(`p[data-cart-detail-id='${productId}']`).text(formatCurrency(newPrice));
+
+    // Update total cart price
+    updateTotalCartPrice();
   });
 })(jQuery);

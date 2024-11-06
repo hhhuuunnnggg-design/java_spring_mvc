@@ -17,7 +17,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import vn.hoidanit.laptopshop.entity.Cart;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.service.UserService;
 
@@ -53,34 +52,19 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-
-        // Lấy email từ đối tượng Authentication
+        // get email
         String email = authentication.getName();
-        // Truy xuất người dùng từ cơ sở dữ liệu bằng email
+        // query user
         User user = this.userService.getUserByEmail(email);
-
         if (user != null) {
-            // Kiểm tra nếu người dùng có giỏ hàng hay không
-            Cart cart = user.getCart();
-            if (cart != null) {
-                // Nếu giỏ hàng tồn tại, lưu số lượng giỏ hàng vào session
-                session.setAttribute("cartSum", cart.getSum());
-                session.setAttribute("sum", cart.getSum());
-            } else {
-                // Nếu giỏ hàng không tồn tại, đặt giá trị mặc định cho "cartSum" và "sum"
-                session.setAttribute("cartSum", 0);
-                session.setAttribute("sum", 0);
-            }
-
-            // Lưu thông tin khác của người dùng vào session
             session.setAttribute("fullName", user.getFullname());
             session.setAttribute("avatar", user.getAvatar());
             session.setAttribute("id", user.getId());
             session.setAttribute("email", user.getEmail());
-
-            int sum = user.getCart().getSum();
+            int sum = user.getCart() == null ? 0 : user.getCart().getSum();
             session.setAttribute("sum", sum);
         }
+
     }
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy(); // Chiến lược chuyển hướng mặc định
