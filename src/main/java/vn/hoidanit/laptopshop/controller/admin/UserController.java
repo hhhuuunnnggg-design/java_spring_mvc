@@ -111,7 +111,7 @@ public class UserController {
 
     // bindingResult giúp thông báo lỗi
     // @Valid để validate dữ liệu
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.POST)
+    @PostMapping("/admin/user/create")
     // hình như là không cần ModelAttribute ở đây, nhưng cần sử dụng khi validate dữ
     // liệu
     public ModelAndView createUser(

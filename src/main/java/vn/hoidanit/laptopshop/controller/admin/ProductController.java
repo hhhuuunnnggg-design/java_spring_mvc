@@ -3,6 +3,7 @@ package vn.hoidanit.laptopshop.controller.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -56,12 +57,10 @@ public class ProductController {
         for (FieldError listerr : err) {
             System.out.println(listerr.getField() + " - " + listerr.getDefaultMessage());
         }
-
         // Kiểm tra lỗi
         if (bindingResult.hasErrors()) {
             return new ModelAndView("admin/product/createProduct"); // Trả về view chứa form với lỗi
         }
-
         // Gọi UploadService để lưu ảnh vào thư mục "avatar" và nhận đường dẫn file
         String avatarFileName = this.uploadService.handleSaveUploadFile(file, "product");
         newProduct.setImage(avatarFileName);
@@ -72,11 +71,16 @@ public class ProductController {
     // end thêm
 
     // start delete (chưa xong)
+
     @DeleteMapping("/admin/product/delete/{id}")
     public ResponseEntity<String> deleteProductId(@PathVariable Long id) {
+        System.out.println("Deleting product with ID: " + id); // Thêm log để kiểm tra
+
+        if (productService.getProductById(id) == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        }
         productService.handleDeleteProductId(id);
         return ResponseEntity.ok("Product với ID " + id + " đã bị xóa");
-
     }
 
     // view
@@ -101,29 +105,36 @@ public class ProductController {
         Product product = productService.getProductById(id);
         ModelAndView modelAndView = new ModelAndView("admin/product/updateProduct");
         modelAndView.addObject("UpdateProductId", product); // Truyền đối tượng product vào ModelAndView
-        System.out.println("đây chính là ảnh " + product.getImage());
         return modelAndView;
     }
 
     @PostMapping("/admin/product/update/{id}")
     public ModelAndView postUpdateProduct(@ModelAttribute("UpdateProductId") Product newProduct,
             @RequestParam("hoidanitFile") MultipartFile file) {
-        Product CurentProduct = this.productService.getProductById(newProduct.getId());
+        Product currentProduct = this.productService.getProductById(newProduct.getId());
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/product");
-        String avatarFileName = this.uploadService.handleSaveUploadFile(file, "product");
-        if (CurentProduct != null) {
-            CurentProduct.setName(newProduct.getName());
-            CurentProduct.setPrice(newProduct.getPrice());
-            CurentProduct.setDetaildesc(newProduct.getDetaildesc());
-            CurentProduct.setShortdesc(newProduct.getShortdesc());
-            CurentProduct.setQuantity(newProduct.getQuantity());
-            CurentProduct.setFactory(newProduct.getFactory());
-            CurentProduct.setTarget(newProduct.getTarget());
-            CurentProduct.setImage(avatarFileName);
-            this.productService.handleSaveProduct(CurentProduct);
 
+        if (currentProduct != null) {
+            // Nếu file không trống, upload và cập nhật đường dẫn ảnh mới
+            if (!file.isEmpty()) {
+                String avatarFileName = this.uploadService.handleSaveUploadFile(file, "product");
+                currentProduct.setImage(avatarFileName); // Cập nhật ảnh mới
+            }
+
+            // Cập nhật các thông tin khác của sản phẩm
+            currentProduct.setName(newProduct.getName());
+            currentProduct.setPrice(newProduct.getPrice());
+            currentProduct.setDetaildesc(newProduct.getDetaildesc());
+            currentProduct.setShortdesc(newProduct.getShortdesc());
+            currentProduct.setQuantity(newProduct.getQuantity());
+            currentProduct.setFactory(newProduct.getFactory());
+            currentProduct.setTarget(newProduct.getTarget());
+            this.productService.handleSaveProduct(currentProduct);
         }
+
         return modelAndView;
     }
+
+    // end sua
 
 }

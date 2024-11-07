@@ -7,6 +7,8 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
       name="viewport"
@@ -122,6 +124,13 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
       </div>
     </div>
     <script>
+      // Lấy CSRF token và header từ thẻ meta
+      const csrfToken = $("meta[name='_csrf']").attr("content");
+      const csrfHeader = $("meta[name='_csrf_header']").attr("content");
+
+      console.log("CSRF Token:", csrfToken);
+      console.log("CSRF Header:", csrfHeader);
+
       function deleteUser(productId) {
         if (
           confirm(
@@ -131,6 +140,10 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
           $.ajax({
             url: "/admin/product/delete/" + productId,
             type: "DELETE",
+            beforeSend: function (xhr) {
+              // Thêm CSRF token vào header
+              xhr.setRequestHeader(csrfHeader, csrfToken);
+            },
             success: function (result) {
               location.reload(); // Tải lại trang để cập nhật danh sách
             },
