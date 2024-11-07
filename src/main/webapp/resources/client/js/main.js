@@ -56,15 +56,25 @@
     ],
     responsiveClass: true,
     responsive: {
-      0: { items: 1 },
-      576: { items: 1 },
-      768: { items: 1 },
-      992: { items: 2 },
-      1200: { items: 2 },
+      0: {
+        items: 1,
+      },
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 1,
+      },
+      992: {
+        items: 2,
+      },
+      1200: {
+        items: 2,
+      },
     },
   });
 
-  // Vegetable carousel
+  // vegetable carousel
   $(".vegetable-carousel").owlCarousel({
     autoplay: true,
     smartSpeed: 1500,
@@ -79,59 +89,134 @@
     ],
     responsiveClass: true,
     responsive: {
-      0: { items: 1 },
-      576: { items: 1 },
-      768: { items: 2 },
-      992: { items: 3 },
-      1200: { items: 4 },
+      0: {
+        items: 1,
+      },
+      576: {
+        items: 1,
+      },
+      768: {
+        items: 2,
+      },
+      992: {
+        items: 3,
+      },
+      1200: {
+        items: 4,
+      },
     },
   });
 
-  // Format currency function for Vietnamese Dong
-  function formatCurrency(value) {
-    const formatter = new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
+  // Modal Video
+  $(document).ready(function () {
+    var $videoSrc;
+    $(".btn-play").click(function () {
+      $videoSrc = $(this).data("src");
     });
-    return formatter.format(value);
-  }
+    console.log($videoSrc);
 
-  // Update total cart price function
-  function updateTotalCartPrice() {
-    let total = 0;
-    $(".quantity input").each(function () {
-      const quantity = parseInt($(this).val());
-      const price = parseFloat($(this).data("cart-detail-price"));
-      total += quantity * price;
+    $("#videoModal").on("shown.bs.modal", function (e) {
+      $("#video").attr(
+        "src",
+        $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0"
+      );
     });
 
-    // Update the total price in the UI
-    $(".cart-total-price").text(formatCurrency(total));
-    $(".cart-total-price").attr("data-cart-total-price", total);
-  }
+    $("#videoModal").on("hide.bs.modal", function (e) {
+      $("#video").attr("src", $videoSrc);
+    });
+  });
 
-  // Product Quantity Change Event
+  // Product Quantity
+  // $('.quantity button').on('click', function () {
+  //     var button = $(this);
+  //     var oldValue = button.parent().parent().find('input').val();
+  //     if (button.hasClass('btn-plus')) {
+  //         var newVal = parseFloat(oldValue) + 1;
+  //     } else {
+  //         if (oldValue > 0) {
+  //             var newVal = parseFloat(oldValue) - 1;
+  //         } else {
+  //             newVal = 0;
+  //         }
+  //     }
+  //     button.parent().parent().find('input').val(newVal);
+  // });
   $(".quantity button").on("click", function () {
-    const button = $(this);
-    const input = button.closest(".quantity").find("input");
-    let oldValue = parseInt(input.val());
+    let change = 0;
 
-    // Determine if the button is increment or decrement
+    var button = $(this);
+    var oldValue = button.parent().parent().find("input").val();
     if (button.hasClass("btn-plus")) {
-      oldValue += 1;
+      var newVal = parseFloat(oldValue) + 1;
+      change = 1;
     } else {
-      oldValue = oldValue > 1 ? oldValue - 1 : 1; // Decrement but not below 1
+      if (oldValue > 1) {
+        var newVal = parseFloat(oldValue) - 1;
+        change = -1;
+      } else {
+        newVal = 1;
+      }
+    }
+    const input = button.parent().parent().find("input");
+    input.val(newVal);
+
+    //set form index
+    const index = input.attr("data-cart-detail-index");
+    const el = document.getElementById(`cartDetails${index}.quantity`);
+    $(el).val(newVal);
+
+    //get price
+    const price = input.attr("data-cart-detail-price");
+    const id = input.attr("data-cart-detail-id");
+
+    const priceElement = $(`p[data-cart-detail-id='${id}']`);
+    if (priceElement) {
+      const newPrice = +price * newVal;
+      priceElement.text(formatCurrency(newPrice.toFixed(2)) + " đ");
     }
 
-    input.val(oldValue); // Set new quantity in input
+    //update total cart price
+    const totalPriceElement = $(`p[data-cart-total-price]`);
 
-    // Update individual product total price
-    const price = parseFloat(input.data("cart-detail-price"));
-    const productId = input.data("cart-detail-id");
-    const newPrice = price * oldValue;
-    $(`p[data-cart-detail-id='${productId}']`).text(formatCurrency(newPrice));
+    if (totalPriceElement && totalPriceElement.length) {
+      const currentTotal = totalPriceElement
+        .first()
+        .attr("data-cart-total-price");
+      let newTotal = +currentTotal;
+      if (change === 0) {
+        newTotal = +currentTotal;
+      } else {
+        newTotal = change * +price + +currentTotal;
+      }
 
-    // Update total cart price
-    updateTotalCartPrice();
+      //reset change
+      change = 0;
+
+      //update
+      totalPriceElement?.each(function (index, element) {
+        //update text
+        $(totalPriceElement[index]).text(
+          formatCurrency(newTotal.toFixed(2)) + " đ"
+        );
+
+        //update data-attribute
+        $(totalPriceElement[index]).attr("data-cart-total-price", newTotal);
+      });
+    }
   });
+
+  function formatCurrency(value) {
+    // Use the 'vi-VN' locale to format the number according to Vietnamese currency format
+    // and 'VND' as the currency type for Vietnamese đồng
+    const formatter = new Intl.NumberFormat("vi-VN", {
+      style: "decimal",
+      minimumFractionDigits: 0, // No decimal part for whole numbers
+    });
+
+    let formatted = formatter.format(value);
+    // Replace dots with commas for thousands separator
+    formatted = formatted.replace(/\./g, ",");
+    return formatted;
+  }
 })(jQuery);

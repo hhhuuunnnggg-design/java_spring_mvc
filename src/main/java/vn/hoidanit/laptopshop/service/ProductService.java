@@ -91,7 +91,7 @@ public class ProductService {
                     cartDetailRepository.save(cd); // Lưu đối tượng CartDetail thực tế
                 } else {
                     // Nếu sản phẩm đã tồn tại trong giỏ hàng, tăng số lượng lên 1
-                    oldCartDetail.setQuantity(oldCartDetail.getQuantity());
+                    oldCartDetail.setQuantity(oldCartDetail.getQuantity() + 1);
                     cartDetailRepository.save(oldCartDetail); // Cập nhật lại CartDetail
 
                     // Cập nhật tổng số lượng sản phẩm trong giỏ hàng
@@ -110,24 +110,35 @@ public class ProductService {
         return this.cartRepository.findByUser(user).orElse(null);
     }
 
-    // public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
-    // Optional<CartDetail> cartDetailOptional =
-    // this.cartDetailRepository.findById(cartDetailId);
-    // if (cartDetailOptional.isPresent()) {
-    // CartDetail cartDetail = cartDetailOptional.get();
-    // Cart currentCart = cartDetail.getCart();
-    // this.cartDetailRepository.deleteById(cartDetailId);
+    public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
+        Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetailId);
+        if (cartDetailOptional.isPresent()) {
+            CartDetail cartDetail = cartDetailOptional.get();
+            Cart currentCart = cartDetail.getCart();
+            this.cartDetailRepository.deleteById(cartDetailId);
 
-    // if (currentCart.getSum() > 1) {
-    // int s = currentCart.getSum() - 1;
-    // currentCart.setSum(s);
-    // session.setAttribute("sum", currentCart);
-    // this.cartRepository.save(currentCart);
-    // } else {
-    // this.cartRepository.deleteById(currentCart.getId());
-    // session.setAttribute("sum", 0);
-    // }
-    // }
-    // }
+            if (currentCart.getSum() > 1) {
+                int s = currentCart.getSum() - 1;
+                currentCart.setSum(s);
+                session.setAttribute("sum", currentCart.getSum());
+                this.cartRepository.save(currentCart);
+            } else {
+                this.cartRepository.deleteById(currentCart.getId());
+                session.setAttribute("sum", 0);
+                this.cartRepository.save(currentCart);
+            }
+        }
+    }
+
+    public void handleUpdateCartBeforeCheckout(List<CartDetail> cartDetails) {
+        for (CartDetail cartDetail : cartDetails) {
+            Optional<CartDetail> cdOptional = this.cartDetailRepository.findById(cartDetail.getId());
+            if (cdOptional.isPresent()) {
+                CartDetail currentCartDetail = cdOptional.get();
+                currentCartDetail.setQuantity(cartDetail.getQuantity());
+                this.cartDetailRepository.save(currentCartDetail);
+            }
+        }
+    }
 
 }
