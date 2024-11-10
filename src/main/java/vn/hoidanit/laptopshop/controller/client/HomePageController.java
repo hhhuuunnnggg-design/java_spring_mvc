@@ -3,6 +3,7 @@ package vn.hoidanit.laptopshop.controller.client;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,8 @@ public class HomePageController {
     @GetMapping("/")
     public ModelAndView getHomePage() {
         ModelAndView modelAndView = new ModelAndView("client/homepage/showHomePage");
-        List<Product> products = productService.gethandleAllProducts();
+
+        Page<Product> products = productService.gethandleAllProducts();
         modelAndView.addObject("listProduct", products);
         return modelAndView;
     }
