@@ -7,7 +7,7 @@ import vn.hoidanit.laptopshop.entity.Cart;
 import vn.hoidanit.laptopshop.entity.CartDetail;
 import vn.hoidanit.laptopshop.entity.Product;
 
-@Repository
+@Repository // định nghĩa metho để lấy data mà k query , đây là orm
 public interface CartDetailRepository extends JpaRepository<CartDetail, Long> {
     boolean existsByCartAndProduct(Cart cart, Product product);
 

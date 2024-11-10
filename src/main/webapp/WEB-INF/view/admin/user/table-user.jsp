@@ -4,6 +4,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
 
@@ -108,6 +110,8 @@ uri="http://java.sun.com/jsp/jstl/core" %>
     <script src="/js/scripts.js"></script>
     <script>
       function deleteUser(userId) {
+        const csrfToken = $("meta[name='_csrf']").attr("content");
+        const csrfHeader = $("meta[name='_csrf_header']").attr("content");
         if (
           confirm(
             "Bạn có chắc muốn xóa người dùng với ID: " + userId + " không?"
@@ -116,6 +120,10 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           $.ajax({
             url: "/admin/detele/" + userId,
             type: "DELETE",
+            beforeSend: function (xhr) {
+              // Thêm CSRF token vào header
+              xhr.setRequestHeader(csrfHeader, csrfToken);
+            },
             success: function (result) {
               location.reload(); // Tải lại trang để cập nhật danh sách
             },

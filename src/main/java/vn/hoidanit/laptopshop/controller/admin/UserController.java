@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -73,21 +72,26 @@ public class UserController {
     }
 
     @PostMapping("/admin/user/update/{id}")
-    public ModelAndView postUpdateUser(@ModelAttribute("newUser") User nguyendinhhung,
+    public ModelAndView postUpdateUser(@Valid @ModelAttribute("newUser") User nguyendinhhung,
+            BindingResult bindingResult,
             @RequestParam("hoidanitFile") MultipartFile file) {
         User CurrentUser = this.userService.getUserById(nguyendinhhung.getId());
 
-        String avatarFileName = this.uploadService.handleSaveUploadFile(file,
-                "avatar");
+        // String avatarFileName = this.uploadService.handleSaveUploadFile(file,
+        // "avatar");
         ModelAndView modelAndView = new ModelAndView("redirect:/admin/user");
         // ăn theo file của url
         if (CurrentUser != null) {
+            if (file.isEmpty()) {
+                String avatarFileName = this.uploadService.handleSaveUploadFile(file, "avatar");
+                CurrentUser.setAvatar(avatarFileName);
+            }
+
             CurrentUser.setEmail(nguyendinhhung.getEmail());
             CurrentUser.setFullname(nguyendinhhung.getFullname());
             CurrentUser.setAdress(nguyendinhhung.getAdress());
             CurrentUser.setPhone(nguyendinhhung.getPhone());
             CurrentUser.setPassword(nguyendinhhung.getPassword());
-            CurrentUser.setAvatar(avatarFileName);
             this.userService.handleSaveUser(CurrentUser);
         }
         return modelAndView;
@@ -102,7 +106,7 @@ public class UserController {
     }
 
     // start create
-    @RequestMapping(value = "/admin/user/create", method = RequestMethod.GET)
+    @GetMapping(value = "/admin/user/create")
     public ModelAndView createUserForm() {
         ModelAndView modelAndView = new ModelAndView("admin/user/create");
         modelAndView.addObject("newOneUser", new User());

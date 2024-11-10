@@ -5,12 +5,15 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 import jakarta.servlet.DispatcherType;
@@ -18,6 +21,7 @@ import vn.hoidanit.laptopshop.service.CustomUserDetailsService;
 import vn.hoidanit.laptopshop.service.UserService;
 
 @Configuration
+@EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
@@ -26,7 +30,6 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 
-    // đang ghi đè spring config
     @Bean
     public UserDetailsService userDetailsService(UserService userService) {
         return new CustomUserDetailsService(userService);
@@ -39,84 +42,57 @@ public class SecurityConfiguration {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder);
-        // authProvider.setHideUserNotFoundExceptions(false);
         return authProvider;
     }
 
-    // remember me, đang cấu hình là 30 ngày
     @Bean
     public SpringSessionRememberMeServices rememberMeServices() {
-        // Tạo một đối tượng SpringSessionRememberMeServices để xử lý chức năng
-        // "Remember Me"
         SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-
-        // Tùy chọn cài đặt để luôn bật "Remember Me" cho người dùng
         rememberMeServices.setAlwaysRemember(true);
-
-        return rememberMeServices; // Trả về đối tượng rememberMeServices để Spring Security quản lý
+        return rememberMeServices;
     }
 
     @Bean
     public AuthenticationSuccessHandler customSuccessHandler() {
-        // Tạo một đối tượng CustomSuccessHandler để xử lý logic khi đăng nhập thành
-        // công
         return new CustomSuccessHandler();
+    }
+
+    // Cấu hình StrictHttpFirewall để cho phép "//" trong URL
+    @Bean
+    public HttpFirewall allowDoubleSlashFirewall() {
+        StrictHttpFirewall firewall = new StrictHttpFirewall();
+        firewall.setAllowUrlEncodedDoubleSlash(true); // Cho phép URL chứa "//"
+        return firewall;
     }
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        // Cấu hình bảo mật HTTP với lambdas (giúp mã cấu hình ngắn gọn hơn trong Spring
-        // Security 6+)
         http
                 .authorizeHttpRequests(authorize -> authorize
-                        // Cho phép tất cả các yêu cầu với các loại Dispatcher FORWARD và INCLUDE
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
-                        .permitAll() // Cho phép tất cả người dùng truy cập các tài nguyên được chuyển tiếp hoặc bao
-                                     // gồm bởi servlet
-
-                        // Các endpoint công khai, không cần xác thực
-                        .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**", "/images/**")
-                        .permitAll() // Cho phép truy cập không cần đăng nhập vào các đường dẫn này
-
-                        // Chỉ cho phép người dùng có ROLE_ADMIN truy cập các đường dẫn bắt đầu với
-                        // "/admin/"
+                        .permitAll()
+                        .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**", "/images/**",
+                                "/register")
+                        .permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        // Yêu cầu xác thực cho tất cả các yêu cầu khác
-                        .anyRequest().authenticated()) // Bất kỳ yêu cầu nào khác đều phải xác thực
-
-                // Quản lý phiên đăng nhập
+                        .anyRequest().authenticated())
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // Tạo phiên đăng nhập cho mỗi yêu cầu mới
-                        .invalidSessionUrl("/logout?expired") // Chuyển hướng tới URL này khi phiên hết hạn
-
-                        // Cài đặt số lượng phiên tối đa cho mỗi người dùng
-                        .maximumSessions(1) // Mỗi tài khoản chỉ cho phép đăng nhập vào một phiên duy nhất
-                        .maxSessionsPreventsLogin(false)) // Khi người dùng đăng nhập ở thiết bị khác, người đăng nhập
-                                                          // trước sẽ bị đăng xuất
-
-                // Cấu hình đăng xuất
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                        .invalidSessionUrl("/logout?expired")
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false))
                 .logout(logout -> logout
-                        .deleteCookies("JSESSIONID") // Xóa cookie "JSESSIONID" khi người dùng đăng xuất
-                        .invalidateHttpSession(true)) // Hủy phiên đăng nhập hiện tại khi đăng xuất
-
-                // Cấu hình ghi nhớ đăng nhập
-                .rememberMe(r -> r.rememberMeServices(rememberMeServices())) // Sử dụng dịch vụ ghi nhớ đăng nhập tuỳ
-                                                                             // chỉnh
-
-                // Cấu hình trang đăng nhập
+                        .deleteCookies("JSESSIONID")
+                        .invalidateHttpSession(true))
+                .rememberMe(r -> r.rememberMeServices(rememberMeServices()))
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/login") // Trang đăng nhập tùy chỉnh
-                        .failureUrl("/login?error") // Chuyển hướng đến URL này khi đăng nhập thất bại
-                        .successHandler(customSuccessHandler()) // Dùng customSuccessHandler để xử lý khi đăng nhập
-                                                                // thành công
-                        .permitAll()) // Cho phép truy cập vào trang đăng nhập mà không cần xác thực
+                        .loginPage("/login")
+                        .failureUrl("/login?error")
+                        .successHandler(customSuccessHandler())
+                        .permitAll())
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny"));
 
-                // Xử lý lỗi quyền truy cập
-                .exceptionHandling(ex -> ex.accessDeniedPage("/access-deny")); // Chuyển hướng đến trang này nếu người
-                                                                               // dùng cố truy cập trang không có quyền
-
-        return http.build(); // Xây dựng cấu hình bảo mật
+        http.setSharedObject(HttpFirewall.class, allowDoubleSlashFirewall()); // Áp dụng StrictHttpFirewall đã tùy chỉnh
+        return http.build();
     }
-
 }

@@ -13,7 +13,7 @@ public class DashboardController {
     private UserService userService;
 
     @GetMapping("/admin")
-    public ModelAndView getHomePage() {
+    public ModelAndView getDashboard() {
         ModelAndView modelAndView = new ModelAndView("admin/Dashboard/showView"); // vewname là đường link dẫ đến jsp
         return modelAndView;
     }
