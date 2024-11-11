@@ -31,7 +31,7 @@ public class ProductController {
     private UploadService uploadService;
 
     @GetMapping("/admin/product")
-    public ModelAndView getProductPage(@RequestParam("page") Long page) {
+    public ModelAndView getProductPage() {
         ModelAndView modelAndView = new ModelAndView("admin/product/table-product"); // vewname là đường link dẫ đến jsp
         List<Product> products = this.productService.gethandleAllProducts();
         modelAndView.addObject("tableListProduct", products);
