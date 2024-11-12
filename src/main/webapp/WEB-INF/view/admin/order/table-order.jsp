@@ -40,9 +40,6 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
               <div class="col-md-10 col-12 mx-auto">
                 <div class="d-flex justify-content-between align-items-center">
                   <h3>Table Order</h3>
-                  <a href="/admin/order/create">
-                    <button class="btn btn-primary">Create Order</button>
-                  </a>
                 </div>
                 <hr />
 
