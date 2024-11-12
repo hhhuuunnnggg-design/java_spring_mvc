@@ -3,6 +3,9 @@ package vn.hoidanit.laptopshop.controller.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -31,11 +34,17 @@ public class ProductController {
     private UploadService uploadService;
 
     @GetMapping("/admin/product")
-    public ModelAndView getProductPage() {
-        ModelAndView modelAndView = new ModelAndView("admin/product/table-product"); // vewname là đường link dẫ đến jsp
-        List<Product> products = this.productService.gethandleAllProducts();
-        modelAndView.addObject("tableListProduct", products);
+    public ModelAndView getProductPage(@RequestParam(value = "page", defaultValue = "1") int page) {
+        ModelAndView modelAndView = new ModelAndView("admin/product/table-product");
+        // xây dụng phân trang
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<Product> products = this.productService.gethandleAllProducts(pageable);
+        List<Product> listProducts = products.getContent();
+        modelAndView.addObject("tableListProduct", listProducts);
 
+        modelAndView.addObject("currentPage", page);
+        // totalPages, tổng số trang
+        modelAndView.addObject("totalPages", products.getTotalPages());
         return modelAndView;
     }
 
