@@ -89,15 +89,13 @@ uri="http://www.springframework.org/tags/form" %>
                 <li class="nav-item">
                   <a
                     class="d-flex m-2 py-2 bg-light rounded-pill active"
-                    data-bs-toggle="pill"
-                    href="#tab-1"
+                    href="/product"
                   >
-                    <span class="text-dark" style="width: 130px"
-                      >All Products</span
-                    >
+                    <span class="text-dark" style="width: 130px">All Products</span>
                   </a>
                 </li>
               </ul>
+
             </div>
           </div>
           <div class="tab-content">

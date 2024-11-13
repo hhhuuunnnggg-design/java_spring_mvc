@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +36,17 @@ public class ItemController {
         System.out.println(products);
         viewProduct.addObject("Product", products);
         return viewProduct;
+    }
+
+    @GetMapping("/product")
+    public ModelAndView getHomePage() {
+        ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
+        // 10 sản phẩm
+        Pageable pageable = PageRequest.of(0, 3);
+        Page<Product> products = productService.gethandleAllProducts(pageable);
+        List<Product> prd = products.getContent();
+        modelAndView.addObject("listProduct", prd);
+        return modelAndView;
     }
 
     @GetMapping("/cart")
