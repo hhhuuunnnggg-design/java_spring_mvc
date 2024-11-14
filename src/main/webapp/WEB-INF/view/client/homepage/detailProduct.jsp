@@ -286,7 +286,7 @@
                                                     </c:forEach>
                                                     <li class="page-item">
                                                         <a class="${totalPages eq currentPage ? 'disabled page-link' : 'page-link'}"
-                                                            href="/products?page=${currentPage + 1}${queryString}"
+                                                            href="/product?page=${currentPage + 1}${queryString}"
                                                             aria-label="Next">
                                                             <span aria-hidden="true">Sau</span>
                                                         </a>

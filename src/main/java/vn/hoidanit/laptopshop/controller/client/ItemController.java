@@ -2,6 +2,7 @@ package vn.hoidanit.laptopshop.controller.client;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -38,23 +39,21 @@ public class ItemController {
         return viewProduct;
     }
 
-    // ,
-    // @RequestParam(value = "name") Optional<String> nameOptional
     @GetMapping("/product")
-    public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page) {
+    public ModelAndView getProductList(@RequestParam(value = "page", defaultValue = "1") int page,
+            @RequestParam(value = "name", required = false) Optional<String> name) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
-        // 10 sản phẩm
-        Pageable pageable = PageRequest.of(page - 1, 4);
-        Page<Product> products = productService.gethandleAllProducts(pageable);
+        Pageable pageable = PageRequest.of(page - 1, 60);
+
+        String nameParame = name.isPresent() ? name.get() : "";
+        Page<Product> products = productService.gethandleAllProductWithPect(pageable, nameParame);
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
-        // trang hiện tại
         modelAndView.addObject("currentPage", page);
-        // tổng sp trong 1 trang
         modelAndView.addObject("totalPages", products.getTotalPages());
-
-        // check fillter
-        // String name = nameOptional.get();
+        if (name != null && !name.isEmpty()) {
+            modelAndView.addObject("filterName", name);
+        }
         return modelAndView;
     }
 
