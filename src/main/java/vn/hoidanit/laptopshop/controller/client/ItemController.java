@@ -41,19 +41,27 @@ public class ItemController {
 
     @GetMapping("/product")
     public ModelAndView getProductList(@RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "name", required = false) Optional<String> name) {
+            @RequestParam(value = "name", required = false) Optional<String> name,
+            @RequestParam(value = "min-price", required = false) Optional<String> minPriceOptional) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
         Pageable pageable = PageRequest.of(page - 1, 60);
 
-        String nameParame = name.isPresent() ? name.get() : "";
-        Page<Product> products = productService.gethandleAllProductWithPect(pageable, nameParame);
+        // case 0:
+        // String nameParame = name.isPresent() ? name.get() : "";
+        // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
+        // nameParame);
+
+        // case 1:
+        Double minPriceParam = minPriceOptional.isPresent() ? Double.parseDouble(minPriceOptional.get()) : 0;
+        Page<Product> products = productService.gethandleAllProductWithPect(pageable, minPriceParam);
+
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
         modelAndView.addObject("currentPage", page);
         modelAndView.addObject("totalPages", products.getTotalPages());
-        if (name != null && !name.isEmpty()) {
-            modelAndView.addObject("filterName", name);
-        }
+        // if (name != null && !name.isEmpty()) {
+        // modelAndView.addObject("filterName", name);
+        // }
         return modelAndView;
     }
 

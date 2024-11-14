@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +14,6 @@ import vn.hoidanit.laptopshop.entity.CartDetail;
 import vn.hoidanit.laptopshop.entity.Order;
 import vn.hoidanit.laptopshop.entity.OrderDetail;
 import vn.hoidanit.laptopshop.entity.Product;
-import vn.hoidanit.laptopshop.entity.Product_;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
@@ -44,15 +42,15 @@ public class ProductService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-    // private Specification<Product> namelike(String name) {
-    // return (root, query, criteriaBuilder) ->
-    // criteriaBuilder.like(root.get(Product_.NAME), "%" + name + "%");
+    // case 0:
+    // public Page<Product> gethandleAllProductWithPect(Pageable page, String name)
+    // {
+    // return this.productRepository.findAll(ProductSpec.namelike(name), page);
     // }
 
-    public Page<Product> gethandleAllProductWithPect(Pageable page, String name) {
-
-        return this.productRepository.findAll(ProductSpec.namelike(name), page);
-
+    // case1:
+    public Page<Product> gethandleAllProductWithPect(Pageable page, Double price) {
+        return this.productRepository.findAll(ProductSpec.minPrice(price), page);
     }
 
     public Page<Product> gethandleAllProductss(Pageable page) {
