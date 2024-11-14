@@ -1,6 +1,7 @@
 package vn.hoidanit.laptopshop.controller.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,9 @@ public class ItemController {
     @GetMapping("/product")
     public ModelAndView getProductList(@RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "name", required = false) Optional<String> name,
-            @RequestParam(value = "min-price", required = false) Optional<String> minPriceOptional) {
+            @RequestParam(value = "min-price", required = false) Optional<String> minPriceOptional,
+            @RequestParam(value = "factory", required = false) Optional<String> factoryOptional,
+            @RequestParam(value = "max-price", required = false) Optional<String> maxPriceOptional) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
         Pageable pageable = PageRequest.of(page - 1, 60);
 
@@ -51,17 +54,42 @@ public class ItemController {
         // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
         // nameParame);
 
-        // case 1:
-        Double minPriceParam = minPriceOptional.isPresent() ? Double.parseDouble(minPriceOptional.get()) : 0;
-        Page<Product> products = productService.gethandleAllProductWithPect(pageable, minPriceParam);
+        // case 1:  (min)
+        // Double minPriceParam = minPriceOptional.isPresent() ?
+        // Double.parseDouble(minPriceOptional.get()) : 0;
+        // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
+        // minPriceParam);
+
+        // case 2  (max)
+//        Double maxPriceParam = maxPriceOptional.isPresent() ? Double.parseDouble(maxPriceOptional.get()) : 1000000000;
+//        Page<Product> products = productService.gethandleAllProductWithPect(pageable,
+//                maxPriceParam);
+
+        //case 3
+//        String factoryOptionalParame = factoryOptional.isPresent() ? factoryOptional.get() : "";
+//        Page<Product> products = productService.gethandleAllProductWithPect(pageable,factoryOptionalParame);
+
+        //case 4
+//        List<String>factoryOptionalParame= Arrays.asList(factoryOptional.get().split(","));
+//        Page<Product> products = productService.gethandleAllProductWithPect(pageable,factoryOptionalParame);
+
+        // case 4 chỉ tạm xong thôi()
+        List<String> factoryOptionalParam = new ArrayList<>();
+        if (factoryOptional.isPresent() && !factoryOptional.get().isEmpty()) {
+            factoryOptionalParam = Arrays.asList(factoryOptional.get().split(","));
+        }
+        else {
+            Page<Product> pro = this.productService.gethandleAllProductss(pageable);
+        }
+
+        Page<Product> products = productService.gethandleAllProductWithPect(pageable, factoryOptionalParam);
+
 
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
         modelAndView.addObject("currentPage", page);
         modelAndView.addObject("totalPages", products.getTotalPages());
-        // if (name != null && !name.isEmpty()) {
-        // modelAndView.addObject("filterName", name);
-        // }
+
         return modelAndView;
     }
 

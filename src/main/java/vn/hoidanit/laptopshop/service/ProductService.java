@@ -49,9 +49,27 @@ public class ProductService {
     // }
 
     // case1:
-    public Page<Product> gethandleAllProductWithPect(Pageable page, Double price) {
-        return this.productRepository.findAll(ProductSpec.minPrice(price), page);
+    // public Page<Product> gethandleAllProductWithPect(Pageable page, Double
+    // minPrice)
+    // {
+    // return this.productRepository.findAll(ProductSpec.minPrice(minPrice), page);
+    // }
+
+    // case2:
+//    public Page<Product> gethandleAllProductWithPect(Pageable page, Double Maxprice) {
+//        return this.productRepository.findAll(ProductSpec.maxPrice(Maxprice), page);
+//    }
+
+    //case 3
+//    public Page<Product> gethandleAllProductWithPect(Pageable page, String fatory) {
+//        return this.productRepository.findAll(ProductSpec.factoryLike(fatory), page);
+//    }
+
+    //case 4
+    public Page<Product> gethandleAllProductWithPect(Pageable page, List<String> fatory) {
+        return this.productRepository.findAll(ProductSpec.mathListFactory(fatory),page);
     }
+
 
     public Page<Product> gethandleAllProductss(Pageable page) {
         return this.productRepository.findAll(page);

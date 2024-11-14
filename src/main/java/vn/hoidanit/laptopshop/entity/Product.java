@@ -10,6 +10,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+
 @Entity
 @Table(name = "products")
 public class Product {
