@@ -11,7 +11,11 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "carts")
 public class Cart {
@@ -31,36 +35,6 @@ public class Cart {
     @OneToMany(mappedBy = "cart")
     List<CartDetail> cartDetails;
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public int getSum() {
-        return sum;
-    }
-
-    public void setSum(int sum) {
-        this.sum = sum;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public List<CartDetail> getCartDetails() {
-        return cartDetails;
-    }
-
-    public void setCartDetails(List<CartDetail> cartDetails) {
-        this.cartDetails = cartDetails;
-    }
 
 }
