@@ -3,9 +3,13 @@ package vn.hoidanit.laptopshop.controller.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.hoidanit.laptopshop.entity.Order;
@@ -23,9 +27,17 @@ public class OrderController {
     private OrderDetailService orderDetailService;
 
     @GetMapping("/admin/order")
-    public ModelAndView getOrderPage() {
-        ModelAndView modelAndView = new ModelAndView("admin/order/table-order"); // vewname là đường link dẫ đến jsp
-        List<Order> orders = this.orderService.gethandleAllOrder();
+    public ModelAndView getOrderPage(@RequestParam(value = "page", defaultValue = "1") int page) {
+        ModelAndView modelAndView = new ModelAndView("admin/order/table-order");
+        // chức năng phân trang
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<Order> order = this.orderService.gethandleAllOrder(pageable);
+        List<Order> orders = order.getContent();
+        // trang hiện tại
+        modelAndView.addObject("currentPage", page);
+        // tổng số trang
+        modelAndView.addObject("totalPages", order.getTotalPages());
+
         modelAndView.addObject("tableListOrder", orders);
         return modelAndView;
     }

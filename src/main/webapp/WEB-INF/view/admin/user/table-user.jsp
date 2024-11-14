@@ -99,6 +99,31 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               </table>
             </div>
           </div>
+           <%-- starrt pagination --%>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center ">
+             <li class="page-item"><a class="${1 eq currentPage ? 'disabled page-link' : 'page-link'}"
+                                                            href="/admin/product?page=${currentPage - 1}"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">trước</span>
+                                                        </a></li>
+              <c:forEach var="counter" begin="0" end="${totalPages-1}" varStatus="loop">
+                 <li class="page-item">
+                      <a class="${(loop.index + 1) eq currentPage ? 'active page-link' : 'page-link'}"
+                       href="user?page=${loop.index+1}">${loop.index+1}</a>
+                    </li>
+               </c:forEach>
+
+             
+              
+              <li class="page-item"><a class="${totalPages eq currentPage ? 'disabled page-link' : 'page-link'}"
+                                                            href="/admin/product?page=${currentPage + 1}"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">sau</span>
+                                                        </a></li>
+            </ul>
+          </nav>
+        <%-- end pagination --%>
         </div>
         <jsp:include page="../layout/footer.jsp" />
       </div>

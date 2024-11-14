@@ -3,6 +3,9 @@ package vn.hoidanit.laptopshop.controller.admin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -39,10 +42,21 @@ public class UserController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping("/admin/user")
-    public ModelAndView getUserPage() {
+    public ModelAndView getUserPage(@RequestParam(value = "page", defaultValue = "1") int page) {
         ModelAndView modelAndView = new ModelAndView("admin/user/table-user");
-        List<User> users = this.userService.getAllUsers();
+        // phân trang user
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<User> user = this.userService.getAllUsers(pageable);
+        List<User> users = user.getContent();
         modelAndView.addObject("tableListUser", users);
+        // trang hiện tại
+        modelAndView.addObject("currentPage", page);
+        // số lượng trang
+        modelAndView.addObject("totalPages", user.getTotalPages());
+        System.out.println("số lượng user " + users);
+
+        System.out.println("số lượng page: " + page);
+        System.out.println("số lượng totalPages: " + user.getTotalPages());
         return modelAndView;
     }
 

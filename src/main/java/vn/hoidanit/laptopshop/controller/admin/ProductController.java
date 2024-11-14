@@ -41,7 +41,7 @@ public class ProductController {
         Page<Product> products = this.productService.gethandleAllProducts(pageable);
         List<Product> listProducts = products.getContent();
         modelAndView.addObject("tableListProduct", listProducts);
-
+        // trang hiện tại
         modelAndView.addObject("currentPage", page);
         // totalPages, tổng số trang
         modelAndView.addObject("totalPages", products.getTotalPages());
