@@ -118,7 +118,15 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                 </tbody>
               </table>
                <%-- start paginaiton --%>
-              <nav aria-label="Page navigation example">
+              
+               <%-- end pagination --%>
+
+               
+            </div>
+          </div>
+        </div>
+
+        <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center" >
                   <li class="page-item"><a class="${1 eq currentPage ? 'disabled page-link' : 'page-link'}"
                                                             href="/admin/product?page=${currentPage - 1}"
@@ -140,10 +148,6 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                                                         </a></li>
                 </ul>
               </nav>
-               <%-- end pagination --%>
-            </div>
-          </div>
-        </div>
        
         <jsp:include page="../layout/footer.jsp" />
       </div>

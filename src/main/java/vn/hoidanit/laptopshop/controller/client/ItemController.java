@@ -38,14 +38,23 @@ public class ItemController {
         return viewProduct;
     }
 
+    // ,
+    // @RequestParam(value = "name") Optional<String> nameOptional
     @GetMapping("/product")
-    public ModelAndView getHomePage() {
+    public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
         // 10 sản phẩm
-        Pageable pageable = PageRequest.of(0, 3);
+        Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Product> products = productService.gethandleAllProducts(pageable);
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
+        // trang hiện tại
+        modelAndView.addObject("currentPage", page);
+        // tổng sp trong 1 trang
+        modelAndView.addObject("totalPages", products.getTotalPages());
+
+        // check fillter
+        // String name = nameOptional.get();
         return modelAndView;
     }
 

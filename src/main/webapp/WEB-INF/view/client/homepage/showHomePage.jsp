@@ -61,6 +61,7 @@ uri="http://www.springframework.org/tags/form" %>
     </script>
   </head>
   <body>
+   
     <!-- Spinner Start -->
     <div
       id="spinner"
@@ -142,6 +143,7 @@ uri="http://www.springframework.org/tags/form" %>
                               >
                                 <!-- tạo token -->
                                 <input
+                                 style="display:none;"
                                   type="text"
                                   name="${_csrf.parameterName}"
                                   value="${_csrf.token}"
@@ -572,17 +574,42 @@ uri="http://www.springframework.org/tags/form" %>
           </div>
         </div>
       </div>
+      <%-- start pagination --%>
+      <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center" style="display:flex">
+       <li class="page-item"><a class="${1 eq currentPage ? 'disabled page-link' : 'page-link'}"
+                                                            href="/admin/product?page=${currentPage - 1}"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">trước</span>
+                                                        </a></li>
+
+                  <c:forEach var="counter" begin="0" end="${totalPages-1}" varStatus="loop">
+                    <li class="page-item">
+                      <a class="${(loop.index + 1) eq currentPage ? 'active page-link' : 'page-link'}"
+                       href="?page=${loop.index+1}">${loop.index+1}</a>
+                    </li>
+                  </c:forEach>
+
+                   <li class="page-item"><a class="${totalPages eq currentPage ? 'disabled page-link' : 'page-link'}"
+                                                            href="/admin/product?page=${currentPage + 1}"
+                                                            aria-label="Previous">
+                                                            <span aria-hidden="true">sau</span>
+                                                        </a></li>
+      </ul>
+      <%-- end pagination --%>
+    </nav>
     </div>
+     
     <!-- Fruits Shop End-->
     <!-- Featurs Section Start -->
     <jsp:include page="../layout/feature.jsp" />
     <!-- Featurs Section End -->
-    <!-- Featurs Start -->
-
-    <!-- Featurs End -->
+ 
 
     <!-- Footer Start -->
     <jsp:include page="../layout/footer.jsp" />
+
+   
     <!-- Copyright End -->
 
     <!-- Back to Top -->

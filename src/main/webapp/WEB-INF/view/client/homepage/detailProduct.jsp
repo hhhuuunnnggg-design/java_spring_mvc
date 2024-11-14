@@ -271,15 +271,15 @@
                                                 <div class="pagination d-flex justify-content-center mt-5">
                                                     <li class="page-item">
                                                         <a class="${1 eq currentPage ? 'disabled page-link' : 'page-link'}"
-                                                            href="/products?page=${currentPage - 1}${queryString}"
+                                                            href="/product?page=${currentPage - 1}${queryString}"
                                                             aria-label="Previous">
-                                                            <span aria-hidden="true">&laquo;</span>
+                                                            <span aria-hidden="true">Trước</span>
                                                         </a>
                                                     </li>
                                                     <c:forEach begin="0" end="${totalPages - 1}" varStatus="loop">
                                                         <li class="page-item">
                                                             <a class="${(loop.index + 1) eq currentPage ? 'active page-link' : 'page-link'}"
-                                                                href="/products?page=${loop.index + 1}${queryString}">
+                                                                href="/product?page=${loop.index + 1}${queryString}">
                                                                 ${loop.index + 1}
                                                             </a>
                                                         </li>
@@ -288,7 +288,7 @@
                                                         <a class="${totalPages eq currentPage ? 'disabled page-link' : 'page-link'}"
                                                             href="/products?page=${currentPage + 1}${queryString}"
                                                             aria-label="Next">
-                                                            <span aria-hidden="true">&raquo;</span>
+                                                            <span aria-hidden="true">Sau</span>
                                                         </a>
                                                     </li>
 

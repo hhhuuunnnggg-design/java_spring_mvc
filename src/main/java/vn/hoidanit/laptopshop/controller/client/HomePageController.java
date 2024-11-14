@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.validation.Valid;
@@ -35,13 +36,18 @@ public class HomePageController {
     private PasswordEncoder passwordEncoder;
 
     @GetMapping("/")
-    public ModelAndView getHomePage() {
+    public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/showHomePage");
         // 10 sản phẩm
-        Pageable pageable = PageRequest.of(0, 10);
+        Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Product> products = productService.gethandleAllProducts(pageable);
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
+
+        // trang hiện tại
+        modelAndView.addObject("currentPage", page);
+        // số lượng ở trang hiện tại
+        modelAndView.addObject("totalPages", products.getTotalPages());
         return modelAndView;
     }
 
