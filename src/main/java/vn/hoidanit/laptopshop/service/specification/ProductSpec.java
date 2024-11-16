@@ -32,7 +32,20 @@ public class ProductSpec {
     //case 4
     public static Specification<Product> mathListFactory(List<String> factory) {
         return ((root, query, criteriaBuilder) -> criteriaBuilder.in(root.get(Product_.FACTORY)).value(factory));
-
     }
+
+    //case 5
+    public static Specification<Product> matchPrice(double min, double max) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.and(
+                criteriaBuilder.gt(root.get(Product_.PRICE),min),
+                criteriaBuilder.lt(root.get(Product_.PRICE),max)
+        ));
+    }
+
+    //case 6
+    public static Specification<Product> matchMultiplePrice(double min, double max) {
+        return ((root, query, criteriaBuilder) -> criteriaBuilder.between(root.get(Product_.PRICE), min, max));
+    }
+
 
 }

@@ -1,9 +1,6 @@
 package vn.hoidanit.laptopshop.controller.client;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,6 +41,7 @@ public class ItemController {
     public ModelAndView getProductList(@RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "name", required = false) Optional<String> name,
             @RequestParam(value = "min-price", required = false) Optional<String> minPriceOptional,
+            @RequestParam(value = "price", required = false) Optional<String> priceOptional,
             @RequestParam(value = "factory", required = false) Optional<String> factoryOptional,
             @RequestParam(value = "max-price", required = false) Optional<String> maxPriceOptional) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
@@ -55,34 +53,51 @@ public class ItemController {
         // nameParame);
 
         // case 1:  (min)
-        // Double minPriceParam = minPriceOptional.isPresent() ?
-        // Double.parseDouble(minPriceOptional.get()) : 0;
-        // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
-        // minPriceParam);
+//         Double minPriceParam = minPriceOptional.isPresent() ?
+//         Double.parseDouble(minPriceOptional.get()) : 0;
+//         Page<Product> products = productService.gethandleAllProductWithPect(pageable,
+//         minPriceParam);
 
         // case 2  (max)
 //        Double maxPriceParam = maxPriceOptional.isPresent() ? Double.parseDouble(maxPriceOptional.get()) : 1000000000;
 //        Page<Product> products = productService.gethandleAllProductWithPect(pageable,
 //                maxPriceParam);
 
-        //case 3
+        //case 3 factory=Apple
 //        String factoryOptionalParame = factoryOptional.isPresent() ? factoryOptional.get() : "";
 //        Page<Product> products = productService.gethandleAllProductWithPect(pageable,factoryOptionalParame);
 
-        //case 4
-//        List<String>factoryOptionalParame= Arrays.asList(factoryOptional.get().split(","));
-//        Page<Product> products = productService.gethandleAllProductWithPect(pageable,factoryOptionalParame);
-
+        //case 4 factory=Apple,dell (cái này là demo)
         // case 4 chỉ tạm xong thôi()
-        List<String> factoryOptionalParam = new ArrayList<>();
-        if (factoryOptional.isPresent() && !factoryOptional.get().isEmpty()) {
-            factoryOptionalParam = Arrays.asList(factoryOptional.get().split(","));
-        }
-        else {
-            Page<Product> pro = this.productService.gethandleAllProductss(pageable);
-        }
+//        List<String> factoryOptionalParam = new ArrayList<>();
+//        if (factoryOptional.isPresent() && !factoryOptional.get().isEmpty()) {
+//            factoryOptionalParam = Arrays.asList(factoryOptional.get().split(","));
+//
+//        }
+//        else {
+//            Page<Product> products = this.productService.gethandleAllProductss(pageable);
+//        }
+//        Page<Product> products = productService.gethandleAllProductWithPect(pageable, factoryOptionalParam);
+
+        //tesst
+//        List<String> factoryOptionalParam = new ArrayList<>();
+//
+//
+//        boolean check=factoryOptional.isPresent() && !factoryOptional.get().isEmpty();
+//       String factory = check ? factoryOptionalParam
+
+        List<String> factoryOptionalParam = factoryOptional.map(f -> Arrays.asList(f.split(","))).orElse(Collections.emptyList());
 
         Page<Product> products = productService.gethandleAllProductWithPect(pageable, factoryOptionalParam);
+
+        //case 5 (tu 10tr->15tr)
+//        String price=priceOptional.isPresent() ? priceOptional.get() : "";
+//        Page<Product> products = productService.gethandleAllProductWithPect(pageable, price);
+
+        //case 6 (tu 10tr->15tr va tu 20tr->30tr)
+//        List<String> price=Arrays.asList(priceOptional.orElse("0").split(","));
+//        Page<Product>products=this.productService.gethandleAllProductWithPect(pageable, price);
+
 
 
         List<Product> prd = products.getContent();
