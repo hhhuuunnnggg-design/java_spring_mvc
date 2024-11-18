@@ -2,12 +2,12 @@ package vn.hoidanit.laptopshop.controller.client;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +22,9 @@ import jakarta.servlet.http.HttpSession;
 import vn.hoidanit.laptopshop.entity.Cart;
 import vn.hoidanit.laptopshop.entity.CartDetail;
 import vn.hoidanit.laptopshop.entity.Product;
+import vn.hoidanit.laptopshop.entity.Product_;
 import vn.hoidanit.laptopshop.entity.User;
+import vn.hoidanit.laptopshop.entity.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.service.ProductService;
 
 @Controller
@@ -41,73 +43,35 @@ public class ItemController {
 
     @GetMapping("/product")
     public ModelAndView getProductList(@RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "name", required = false) Optional<String> name,
-            @RequestParam(value = "min-price", required = false) Optional<String> minPriceOptional,
-            @RequestParam(value = "price", required = false) Optional<String> priceOptional,
-            @RequestParam(value = "factory", required = false) Optional<String> factoryOptional,
-            @RequestParam(value = "max-price", required = false) Optional<String> maxPriceOptional) {
+            ProductCriteriaDTO productCriteriaDTO,
+            HttpServletRequest request) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/detailProduct");
-        Pageable pageable = PageRequest.of(page - 1, 60);
 
-        // case 0:
-        String nameParame = name.isPresent() ? name.get() : "";
-        Page<Product> products = productService.gethandleAllProductWithPect(pageable,
-                nameParame);
+        Pageable pageable = PageRequest.of(page - 1, 5);
 
-        // case 1: (min)
-        // Double minPriceParam = minPriceOptional.isPresent() ?
-        // Double.parseDouble(minPriceOptional.get()) : 0;
-        // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
-        // minPriceParam);
-
-        // case 2 (max)
-        // Double maxPriceParam = maxPriceOptional.isPresent() ?
-        // Double.parseDouble(maxPriceOptional.get()) : 1000000000;
-        // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
-        // maxPriceParam);
-
-        // case 3 factory=Apple
-        // String factoryOptionalParame = factoryOptional.isPresent() ?
-        // factoryOptional.get() : "";
-        // Page<Product> products =
-        // productService.gethandleAllProductWithPect(pageable,factoryOptionalParame);
-
-        // case 4 factory=Apple,dell (cái này là demo)
-        // List<String> factoryOptionalParam = new ArrayList<>();
-        // Page<Product> products;
-        // if (factoryOptional.isPresent() && !factoryOptional.get().isEmpty()) {
-        // factoryOptionalParam = Arrays.asList(factoryOptional.get().split(","));
-        // products = productService.gethandleAllProductWithPect(pageable,
-        // factoryOptionalParam);
-        // } else {
-        // products = this.productService.gethandleAllProductss(pageable);
-        // }
-
-        // case 5 (tu 10tr->15tr)
-        // String price=priceOptional.isPresent() ? priceOptional.get() : "";
-        // Page<Product> products = productService.gethandleAllProductWithPect(pageable,
-        // price);
-
-        // case 6 (tu 10tr->15tr va tu 20tr->30tr)
-        // List<String> PricesOptionalParam = new ArrayList<>();
-        // Page<Product> products;
-        // if (priceOptional.isPresent() && !priceOptional.get().isEmpty()) {
-        // PricesOptionalParam = Arrays.asList(priceOptional.get().split(","));
-        // products = productService.gethandleAllProductWithPect(pageable,
-        // PricesOptionalParam);
-        // } else {
-        // products = this.productService.gethandleAllProductss(pageable);
-        // }
-
-        // List<String> price = Arrays.asList(priceOptional.orElse("0").split(","));
-        // Page<Product> products =
-        // this.productService.gethandleAllProductWithPect(pageable,
-        // price);
+        // theo giá cả
+        if (productCriteriaDTO.getSort() != null && productCriteriaDTO.getSort().isPresent()) {
+            String sort = productCriteriaDTO.getSort().get();
+            if (sort.equals("gia-tang-dan")) {
+                pageable = PageRequest.of(page - 1, 5, Sort.by(Product_.PRICE).ascending());
+            } else if (sort.equals("gia-giam-dan")) {
+                pageable = PageRequest.of(page - 1, 5, Sort.by(Product_.PRICE).descending());
+            }
+        }
+        // -------------
+        Page<Product> products = productService.gethandleAllProductWithPect(pageable, productCriteriaDTO);
+        // -------------
+        String qs = request.getQueryString();
+        if (qs != null && !qs.isBlank()) {
+            // remove page
+            qs = qs.replace("page=" + page, "");
+        }
 
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
         modelAndView.addObject("currentPage", page);
         modelAndView.addObject("totalPages", products.getTotalPages());
+        modelAndView.addObject("queryString", qs);
 
         return modelAndView;
     }

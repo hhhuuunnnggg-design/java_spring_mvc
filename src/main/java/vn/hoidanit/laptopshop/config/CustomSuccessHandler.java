@@ -24,8 +24,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     @Autowired
     private UserService userService;
 
-    // Xác định URL đích để chuyển hướng sau khi đăng nhập thành công dựa trên quyền
-    // của người dùng
+    // Xác định URL đích để chuyển hướng sau khi đăng nhập thành công dựa trên quyền của người dùng
     protected String determineTargetUrl(final Authentication authentication) {
         // Bản đồ lưu URL tương ứng với vai trò (ROLE)
         Map<String, String> roleTargetUrlMap = new HashMap<>();

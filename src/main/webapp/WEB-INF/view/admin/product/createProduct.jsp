@@ -163,9 +163,13 @@ uri="http://www.springframework.org/tags/form" %>
                     <div class="mb-3">
                       <label for="target" class="form-label">Target:</label>
                       <form:select path="target" cssClass="form-select">
-                        <form:option value="" label="Select Target" />
-                        <form:option value="100" label="100" />
-                        <form:option value="200" label="200" />
+                     <form:option value="GAMING">Gaming</form:option>
+                                                        <form:option value="SINHVIEN-VANPHONG">Sinh viên - Văn phòng
+                                                        </form:option>
+                                                        <form:option value="THIET-KE-DO-HOA">Thiết kế đồ họa
+                                                        </form:option>
+                                                        <form:option value="MONG-NHE">Mỏng nhẹ</form:option>
+                                                        <form:option value="DOANH-NHAN">Doanh nhân</form:option>
                       </form:select>
                     </div>
                   </div>
