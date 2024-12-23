@@ -191,10 +191,10 @@ public class ProductService {
         Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetailId);
         if (cartDetailOptional.isPresent()) {
             CartDetail cartDetail = cartDetailOptional.get();
-            this.cartDetailRepository.deleteById(cartDetailId);
-
             //xử ly cái giỏ hàng
             Cart currentCart = cartDetail.getCart();
+
+            this.cartDetailRepository.deleteById(cartDetailId);
 
             if (currentCart.getSum() > 1) {
                 int s = currentCart.getSum() - 1;
@@ -226,7 +226,7 @@ public class ProductService {
         // step 1: get cart by user
         Cart cart = this.cartRepository.findByUser(user).orElse(null);
         if (cart != null) {
-           // List<CartDetail> cartsetailss = cart.getUser();
+//            List<CartDetail> cartDetailss = (List<CartDetail>) cart.getUser();
            List<CartDetail> cartDetails = cart.getCartDetails();
             if (cartDetails != null) {
 
