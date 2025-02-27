@@ -7,9 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.hoidanit.laptopshop.entity.Order;
@@ -61,4 +59,22 @@ public class OrderController {
         return modelAndView;
     }
 
+    @PutMapping("/admin/order/update/{id}")
+    public ModelAndView getViewOrderDetailư(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("admin/order/table-order");
+        List<OrderDetail> orderDetails = this.orderDetailService.gethandelAllDetail(id);
+
+        if (orderDetails != null && !orderDetails.isEmpty()) {
+            for (OrderDetail orderDetail : orderDetails) {
+                Product product = orderDetail.getProduct();
+                // Xử lý thêm với product nếu cần
+                System.out.println("Product ID: " + product.getId());
+                System.out.println("Product Name: " + product.getName());
+                System.out.println("đây là ảnh: " + product.getImage());
+            }
+        }
+
+        modelAndView.addObject("viewOrderDetail", orderDetails);
+        return modelAndView;
+    }
 }

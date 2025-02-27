@@ -61,9 +61,9 @@
                             <div class="row g-4 mb-5">
                                 <div>
                                     <nav aria-label="breadcrumb">
-                                        <ol class="breadcrumb">
+                                        <ol style="margin-top: 10px; font-size: 20px;" class="breadcrumb">
                                             <li class="breadcrumb-item"><a href="/">Home</a></li>
-                                            <li class="breadcrumb-item active" aria-current="page">Danh Sách Sản Phẩm
+                                            <li  class="breadcrumb-item active " aria-current="page">Danh Sách Sản Phẩm
                                             </li>
                                         </ol>
                                     </nav>

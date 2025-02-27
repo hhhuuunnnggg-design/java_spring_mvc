@@ -44,7 +44,7 @@ uri="http://www.springframework.org/tags/form" %>
 
               <form:form
                 method="post"
-                action="/admin/user/create"
+                action="/admin/user"
                 modelAttribute="detailUserId"
               >
                 <div class="mb-3">
@@ -90,7 +90,7 @@ uri="http://www.springframework.org/tags/form" %>
                   >
                   <form:input type="text" class="form-control" path="adress" />
                 </div>
-                <a href=""><button class="btn btn-primary">back</button></a>
+                <a href="/admin/user"><button class="btn btn-primary">back..</button></a>
               </form:form>
             </div>
           </div>

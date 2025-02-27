@@ -153,7 +153,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
               location.reload(); // Tải lại trang để cập nhật danh sách
             },
             error: function (err) {
-              alert("Có lỗi xảy ra khi xóa người dùng.");
+              alert("không thể xóa, người dùng đã có trong hệ thống");
             },
           });
         }

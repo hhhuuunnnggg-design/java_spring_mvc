@@ -15,7 +15,7 @@ public class StringToRoleConverter implements Converter<String, Role> {
 
     @Override
     public Role convert(String source) {
-        // Chuyển đổi chuỗi roleId từ form thành kiểu Long
+
         Long roleId = Long.valueOf(source);
 
         // Tìm kiếm Role theo roleId trong cơ sở dữ liệu và trả về
