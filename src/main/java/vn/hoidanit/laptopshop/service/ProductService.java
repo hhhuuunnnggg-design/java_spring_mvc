@@ -44,6 +44,8 @@ public class ProductService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
+
+
     // case 0:
     public Page<Product> gethandleAllProductWithPect(Pageable page, ProductCriteriaDTO productCriteriaDTO) {
         if (productCriteriaDTO.getFactory() == null && productCriteriaDTO.getTarget() == null
@@ -271,7 +273,50 @@ public class ProductService {
         }
 
     }
+    public void handleAddProductToCart(String email, long productId, HttpSession session, long quantity) {
+        User user = this.userService.getUserByEmail(email);
+        if (user != null) {
+            // check if user already has a Cart, if not -> create new
+            Optional<Cart> cartOptional = this.cartRepository.findByUser(user);
+            Cart cart;
+            if (cartOptional.isEmpty()) {
+                // create new cart
+                Cart newCart = new Cart();
+                newCart.setUser(user);
+                newCart.setSum(0);
+                cart = this.cartRepository.save(newCart);
+            } else {
+                cart = cartOptional.get();
+            }
 
+            // save cart_detail
+            // find product by id
+            Optional<Product> productOptional = this.productRepository.findById(productId);
+            if (productOptional.isPresent()) {
+                Product realProduct = productOptional.get();
+
+                // check if the product has been added to the cart before
+                CartDetail oldDetail = this.cartDetailRepository.findByCartAndProduct(cart, realProduct);
+                if (oldDetail == null) {
+                    CartDetail cd = new CartDetail();
+                    cd.setCart(cart);
+                    cd.setProduct(realProduct);
+                    cd.setPrice(realProduct.getPrice());
+                    cd.setQuantity(quantity);
+                    this.cartDetailRepository.save(cd);
+
+                    // update cart (sum)
+                    int s = cart.getSum() + 1;
+                    cart.setSum(s);
+                    this.cartRepository.save(cart);
+                    session.setAttribute("sum", s);
+                } else {
+                    oldDetail.setQuantity(oldDetail.getQuantity() + quantity);
+                    this.cartDetailRepository.save(oldDetail);
+                }
+            }
+        }
+    }
     public void handlePlaceOrders(
             User user, HttpSession session,
             String receiverName, String receiverAddress, String receiverPhone) {

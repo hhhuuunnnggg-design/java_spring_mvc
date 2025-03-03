@@ -40,10 +40,16 @@ uri="http://www.springframework.org/tags/form" %>
     <!-- Template Stylesheet -->
     <link href="/client/css/style.css" rel="stylesheet" />
     <!-- end template -->
+
+    <meta name="_csrf" content="${_csrf.token}" />
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+          rel="stylesheet">
+
     <script>
       $(document).ready(() => {
-
-
         const orgImage="${UpdateProductId.image}"
         if(orgImage){
           const urlImage="/images/product/"+orgImage;
@@ -137,28 +143,34 @@ uri="http://www.springframework.org/tags/form" %>
                                   value="${product.price}"
                                 />vnđ
                               </p>
-                              <form
-                                action="/add-product-to-cart/${product.id}"
-                                method="post"
-                              >
-                                <!-- tạo token -->
-                                <input
-                                 style="display:none;"
-                                  type="text"
-                                  name="${_csrf.parameterName}"
-                                  value="${_csrf.token}"
-                                  readonly
-                                />
+<%--                              <form--%>
+<%--                                action="/add-product-to-cart/${product.id}"--%>
+<%--                                method="post"--%>
+<%--                              >--%>
+<%--                                <!-- tạo token -->--%>
+<%--                                <input--%>
+<%--                                 style="display:none;"--%>
+<%--                                  type="text"--%>
+<%--                                  name="${_csrf.parameterName}"--%>
+<%--                                  value="${_csrf.token}"--%>
+<%--                                  readonly--%>
+<%--                                />--%>
 
-                                <button
-                                  class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"
-                                >
-                                  <i
-                                    class="fa fa-shopping-bag me-2 text-primary"
-                                  ></i>
-                                  Add to cart
-                                </button>
-                              </form>
+<%--                                <button--%>
+<%--                                  class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"--%>
+<%--                                >--%>
+<%--                                  <i--%>
+<%--                                    class="fa fa-shopping-bag me-2 text-primary"--%>
+<%--                                  ></i>--%>
+<%--                                  Add to cart--%>
+<%--                                </button>--%>
+<%--                              </form>--%>
+                              <button data-product-id="${product.id}"
+                                      class="btnAddToCartHomepage mx-auto btn border border-secondary rounded-pill px-3 text-primary">
+                                <i
+                                        class="fa fa-shopping-bag me-2 text-primary"></i>
+                                Add to cart
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -629,5 +641,8 @@ uri="http://www.springframework.org/tags/form" %>
 
     <!-- Template Javascript -->
     <script src="/client/js/main.js"></script>
+    <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
   </body>
 </html>

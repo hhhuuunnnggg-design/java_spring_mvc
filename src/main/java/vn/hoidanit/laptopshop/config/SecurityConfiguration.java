@@ -77,7 +77,7 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE)
                         .permitAll() // Cho phép tất cả các yêu cầu có kiểu dispatcher là FORWARD và INCLUDE
-                        .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**", "/images/**", "/register")
+                        .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**", "/images/**", "/register","/products/**")
                         .permitAll() // Cho phép tất cả các yêu cầu đến các URL này mà không cần xác thực
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ cho phép các yêu cầu đến URL /admin/** nếu người dùng có vai trò ADMIN
                         .anyRequest().authenticated()) // Yêu cầu xác thực cho tất cả các yêu cầu khác
