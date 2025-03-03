@@ -143,33 +143,12 @@ uri="http://www.springframework.org/tags/form" %>
                                   value="${product.price}"
                                 />vnđ
                               </p>
-<%--                              <form--%>
-<%--                                action="/add-product-to-cart/${product.id}"--%>
-<%--                                method="post"--%>
-<%--                              >--%>
-<%--                                <!-- tạo token -->--%>
-<%--                                <input--%>
-<%--                                 style="display:none;"--%>
-<%--                                  type="text"--%>
-<%--                                  name="${_csrf.parameterName}"--%>
-<%--                                  value="${_csrf.token}"--%>
-<%--                                  readonly--%>
-<%--                                />--%>
 
-<%--                                <button--%>
-<%--                                  class="mx-auto btn border border-secondary rounded-pill px-3 text-primary"--%>
-<%--                                >--%>
-<%--                                  <i--%>
-<%--                                    class="fa fa-shopping-bag me-2 text-primary"--%>
-<%--                                  ></i>--%>
-<%--                                  Add to cart--%>
-<%--                                </button>--%>
-<%--                              </form>--%>
                               <button data-product-id="${product.id}"
                                       class="btnAddToCartHomepage mx-auto btn border border-secondary rounded-pill px-3 text-primary">
                                 <i
                                         class="fa fa-shopping-bag me-2 text-primary"></i>
-                                Add to cart
+                                Add to cart..
                               </button>
                             </div>
                           </div>
@@ -262,7 +241,7 @@ uri="http://www.springframework.org/tags/form" %>
                               ><i
                                 class="fa fa-shopping-bag me-2 text-primary"
                               ></i>
-                              Add to cart</a
+                              Add to cart123</a
                             >
                           </div>
                         </div>

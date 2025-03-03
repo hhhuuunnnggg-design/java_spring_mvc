@@ -117,13 +117,27 @@
 
     $("#videoModal").on("shown.bs.modal", function (e) {
       $("#video").attr(
-        "src",
-        $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0"
+          "src",
+          $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0"
       );
     });
 
     $("#videoModal").on("hide.bs.modal", function (e) {
       $("#video").attr("src", $videoSrc);
+    });
+
+    //add active class to header
+    const navElement = $("#navbarCollapse");
+    const currentUrl = window.location.pathname;
+    navElement.find("a.nav-link").each(function () {
+      const link = $(this); // Get the current link in the loop
+      const href = link.attr("href"); // Get the href attribute of the link
+
+      if (href === currentUrl) {
+        link.addClass("active"); // Add 'active' class if the href matches the current URL
+      } else {
+        link.removeClass("active"); // Remove 'active' class if the href does not match
+      }
     });
   });
 
@@ -181,8 +195,8 @@
 
     if (totalPriceElement && totalPriceElement.length) {
       const currentTotal = totalPriceElement
-        .first()
-        .attr("data-cart-total-price");
+          .first()
+          .attr("data-cart-total-price");
       let newTotal = +currentTotal;
       if (change === 0) {
         newTotal = +currentTotal;
@@ -197,7 +211,7 @@
       totalPriceElement?.each(function (index, element) {
         //update text
         $(totalPriceElement[index]).text(
-          formatCurrency(newTotal.toFixed(2)) + " đ"
+            formatCurrency(newTotal.toFixed(2)) + " đ"
         );
 
         //update data-attribute
@@ -220,7 +234,6 @@
     return formatted;
   }
 
-  //  phần này trở xuống là chức năng lọc sản phẩm
   //handle filter products
   $("#btnFilter").click(function (event) {
     event.preventDefault();
@@ -417,5 +430,4 @@
     }
     return true;
   }
-
 })(jQuery);

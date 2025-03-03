@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import vn.hoidanit.laptopshop.entity.Order;
 import vn.hoidanit.laptopshop.repository.OrderRepository;
 
+import java.util.Optional;
+
 @Service
 public class OrderService {
     @Autowired
@@ -17,5 +19,18 @@ public class OrderService {
         return this.orderRepository.findAll(pageable);
 
     }
-
+    public void deleteOrderById(Long id) {
+        orderRepository.deleteById(id);
+    }
+    public Optional<Order> fetchOrderById(long id) {
+        return this.orderRepository.findById(id);
+    }
+    public void updateOrder(Order order) {
+        Optional<Order> orderOptional = this.fetchOrderById(order.getId());
+        if (orderOptional.isPresent()) {
+            Order currentOrder = orderOptional.get();
+            currentOrder.setStatus(order.getStatus());
+            this.orderRepository.save(currentOrder);
+        }
+    }
 }

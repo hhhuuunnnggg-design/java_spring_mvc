@@ -257,7 +257,7 @@
                                                             <i
                                                                 class="fa fa-shopping-bag me-2 text-primary"
                                                             ></i>
-                                                            Add to cart
+                                                            Add to cart.
                                                             </button>
                                                         </form>
                                                         </div>
