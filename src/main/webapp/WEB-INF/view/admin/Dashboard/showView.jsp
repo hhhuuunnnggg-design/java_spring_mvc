@@ -13,7 +13,7 @@ uri="http://www.springframework.org/tags/form" %>
     />
     <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
     <meta name="author" content="Hỏi Dân IT" />
-    <title>Dashboard - Hỏi Dân IT</title>
+    <title>Dashboard - Nguyen Dinh Hung</title>
     <link
       href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
       rel="stylesheet"

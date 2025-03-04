@@ -16,7 +16,7 @@
   />
   <meta name="description" content="Hỏi Dân IT - Dự án laptopshop" />
   <meta name="author" content="Hỏi Dân IT" />
-  <title>Dashboard - Hỏi Dân IT</title>
+  <title>Dashboard - Nguyễn Đình Hùng</title>
   <link href="/css/styles.css" rel="stylesheet" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script
@@ -34,7 +34,7 @@
       <div class="container-fluid px-4">
         <h1 class="mt-4">Dashboard</h1>
         <ol class="breadcrumb mb-4">
-          <li class="breadcrumb-item active">product</li>
+          <li class="breadcrumb-item active">order</li>
         </ol>
       </div>
     </main>

@@ -111,9 +111,12 @@ uri="http://java.sun.com/jsp/jstl/fmt" %>
                     </tr>
                   </c:forEach>
                 </tbody>
+
               </table>
+
             </div>
           </div>
+          <a href="/admin/order"><button class="btn btn-primary">back order</button></a>
         </div>
         <jsp:include page="../layout/footer.jsp" />
       </div>
