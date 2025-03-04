@@ -28,6 +28,7 @@ public class OrderController {
     @Autowired
     private OrderDetailService orderDetailService;
 
+    // lấy gia tri
     @GetMapping("/admin/order")
     public ModelAndView getOrderPage(@RequestParam(value = "page", defaultValue = "1") int page) {
         ModelAndView modelAndView = new ModelAndView("admin/order/table-order");
@@ -44,6 +45,7 @@ public class OrderController {
         return modelAndView;
     }
 
+    //xem chi tiet
     @GetMapping("/admin/order/view/{id}")
     public ModelAndView getViewOrderDetail(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("admin/order/view-orderDetail");
@@ -74,7 +76,6 @@ public class OrderController {
         } else {
             getModelAndView.addObject("newOrder", new Order()); // ✅ Tránh lỗi nếu order không tồn tại
         }
-
         return getModelAndView;
     }
 
@@ -86,15 +87,15 @@ public class OrderController {
         return "redirect:/admin/order";
     }
 
-//    @DeleteMapping("/admin/product/delete/{id}")
-//    public ResponseEntity<String> deleteProductId(@PathVariable Long id) {
-//        System.out.println("Deleting product with ID: " + id); // Thêm log để kiểm tra
-//
-////        if (orderService. == null) {
-////            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-////        }
-//        orderService.deleteOrderById(id);
-//        return ResponseEntity.ok("Product với ID " + id + " đã bị xóa");
-//    }
+    @DeleteMapping("/admin/order/delete/{id}")
+    public ResponseEntity<String> deleteProductId(@PathVariable Long id) {
+        System.out.println("Deleting product with ID: " + id); // Thêm log để kiểm tra
+
+        if (orderService == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
+        }
+        orderService.deleteOrderById(id);
+        return ResponseEntity.ok("Product với ID " + id + " đã bị xóa");
+    }
 
 }

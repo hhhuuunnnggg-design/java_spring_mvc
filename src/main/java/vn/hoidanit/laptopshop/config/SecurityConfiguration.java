@@ -23,6 +23,8 @@ import vn.hoidanit.laptopshop.service.UserService;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true)
+//@Configuration
+//@EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration {
 
     // Định nghĩa bean PasswordEncoder sử dụng thuật toán BCrypt để mã hóa mật khẩu
