@@ -121,6 +121,7 @@ public class ItemController {
         return modelAndView; // Trả về ModelAndView để chuyển hướng người dùng
     }
 
+//    xoa gio hang
     @PostMapping("/delete-cart-product/{id}")
     public ModelAndView deleteCartDetail(@PathVariable Long id,
             HttpServletRequest request) {

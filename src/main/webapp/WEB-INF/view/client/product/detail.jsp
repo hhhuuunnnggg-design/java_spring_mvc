@@ -71,7 +71,7 @@
     <div class="row g-4 mb-5">
       <div>
         <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
+          <ol class="breadcrumb" style="margin: 10px;font-size: 25px;">
             <li class="breadcrumb-item"><a href="/">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">
               Chi Tiết Sản Phẩm
@@ -172,7 +172,7 @@
                         aria-controls="nav-about"
                         aria-selected="true"
                 >
-                  Description
+
                 </button>
               </div>
             </nav>

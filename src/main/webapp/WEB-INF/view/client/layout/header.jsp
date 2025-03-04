@@ -18,17 +18,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
           ></small
         >
       </div>
-      <div class="top-link pe-2">
-        <a href="#" class="text-white"
-          ><small class="text-white mx-2">Privacy Policy</small>/</a
-        >
-        <a href="#" class="text-white"
-          ><small class="text-white mx-2">Terms of Use</small>/</a
-        >
-        <a href="#" class="text-white"
-          ><small class="text-white ms-2">Sales and Refunds</small></a
-        >
-      </div>
+
     </div>
   </div>
   <div class="container px-0">
@@ -96,7 +86,7 @@ uri="http://java.sun.com/jsp/jstl/core" %>
                 </li>
 
                 <li><a class="dropdown-item" href="#">Quản lý tài khoản</a></li>
-                <li><a class="dropdown-item" href="#">Lịch sử mua hàng</a></li>
+                <li><a class="dropdown-item" href="/order-history">Lịch sử mua hàng</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li>
                   <form method="post" action="/logout">

@@ -368,7 +368,7 @@
         //show message
         $.toast({
           heading: "Giỏ hàng",
-          text: "Thêm sản phẩm vào giỏ hàng thành công",
+          text: "Thêm sản phẩm vào giỏ hàng thành công.",
           position: "top-right",
         });
       },
@@ -411,7 +411,7 @@
         //show message
         $.toast({
           heading: "Giỏ hàng",
-          text: "Thêm sản phẩm vào giỏ hàng thành công",
+          text: "Thêm sản phẩm vào giỏ hàng thành công_",
           position: "top-right",
         });
       },

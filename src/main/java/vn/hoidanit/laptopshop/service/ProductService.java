@@ -195,10 +195,9 @@ public class ProductService {
             CartDetail cartDetail = cartDetailOptional.get();
             //xử ly cái giỏ hàng
             Cart currentCart = cartDetail.getCart();
-
             this.cartDetailRepository.deleteById(cartDetailId);
 
-            if (currentCart.getSum() > 1) {
+            if (currentCart.getSum() >0) {
                 int s = currentCart.getSum() - 1;
                 currentCart.setSum(s);
                 session.setAttribute("sum", currentCart.getSum());
