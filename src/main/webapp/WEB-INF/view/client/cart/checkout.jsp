@@ -157,6 +157,8 @@
                                                                 Thanh toán bằng ví VNPAY
                                                             </label>
                                                         </div>
+                                                        <input style="display:none" value="${totalPrice}" name="totalPrice">
+
                                                     </div>
                                                     <div class="mt-4">
                                                         <i class="fas fa-arrow-left"></i>

@@ -45,8 +45,6 @@ public class ProductService {
     @Autowired
     private OrderDetailRepository orderDetailRepository;
 
-
-
     // case 0:
     public Page<Product> gethandleAllProductWithPect(Pageable page, ProductCriteriaDTO productCriteriaDTO) {
         if (productCriteriaDTO.getFactory() == null && productCriteriaDTO.getTarget() == null
@@ -188,17 +186,16 @@ public class ProductService {
         return this.cartRepository.findByUser(user).orElse(null);
     }
 
-
     // chức nang xoóa sp khoi giỏ hàng
     public void handleRemoveCartDetail(long cartDetailId, HttpSession session) {
         Optional<CartDetail> cartDetailOptional = this.cartDetailRepository.findById(cartDetailId);
         if (cartDetailOptional.isPresent()) {
             CartDetail cartDetail = cartDetailOptional.get();
-            //xử ly cái giỏ hàng
+            // xử ly cái giỏ hàng
             Cart currentCart = cartDetail.getCart();
             this.cartDetailRepository.deleteById(cartDetailId);
 
-            if (currentCart.getSum() >0) {
+            if (currentCart.getSum() > 0) {
                 int s = currentCart.getSum() - 1;
                 currentCart.setSum(s);
                 session.setAttribute("sum", currentCart.getSum());
@@ -224,12 +221,12 @@ public class ProductService {
 
     // chức năng thanh toán sản phâẩm
     public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress,
-            String receiverPhone, String paymentMethod) {
+            String receiverPhone, String paymentMethod, String uuid) {
         // step 1: get cart by user
         Cart cart = this.cartRepository.findByUser(user).orElse(null);
         if (cart != null) {
-//            List<CartDetail> cartDetailss = (List<CartDetail>) cart.getUser();
-           List<CartDetail> cartDetails = cart.getCartDetails();
+            // List<CartDetail> cartDetailss = (List<CartDetail>) cart.getUser();
+            List<CartDetail> cartDetails = cart.getCartDetails();
             if (cartDetails != null) {
 
                 // step1: create order
@@ -242,10 +239,10 @@ public class ProductService {
 
                 order.setPaymentMethod(paymentMethod);
                 order.setPaymentStatus("PAYMENT_UNPAID");
-                final String uuid = UUID.randomUUID().toString().replace("-", "");
-                order.setPaymentRef(paymentMethod.equals("COD") ? "UNKNOWN": uuid);
 
-                double  sum = 0;
+                order.setPaymentRef(paymentMethod.equals("COD") ? "UNKNOWN" : uuid);
+
+                double sum = 0;
                 for (CartDetail cd : cartDetails) {
                     sum += cd.getPrice();
                 }
@@ -278,6 +275,7 @@ public class ProductService {
         }
 
     }
+
     public void handleAddProductToCart(String email, long productId, HttpSession session, long quantity) {
         User user = this.userService.getUserByEmail(email);
         if (user != null) {
@@ -322,7 +320,9 @@ public class ProductService {
             }
         }
     }
+
     public void handlePlaceOrders(
+
             User user, HttpSession session,
             String receiverName, String receiverAddress, String receiverPhone) {
 
@@ -372,5 +372,15 @@ public class ProductService {
             }
         }
 
+    }
+
+    public void updatePaymentStatus(String paymentRef, String paymentStatus) {
+        Optional<Order> orderOptional = this.orderRepository.findByPaymentRef(paymentRef);
+        if (orderOptional.isPresent()) {
+            // update
+            Order order = orderOptional.get();
+            order.setPaymentStatus(paymentStatus);
+            this.orderRepository.save(order);
+        }
     }
 }
