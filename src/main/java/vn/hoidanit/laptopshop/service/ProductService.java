@@ -221,7 +221,7 @@ public class ProductService {
 
     // chức năng thanh toán sản phâẩm
     public void handlePlaceOrder(User user, HttpSession session, String receiverName, String receiverAddress,
-            String receiverPhone, String paymentMethod, String uuid) {
+                                 String receiverPhone, String paymentMethod, String uuid) {
         // step 1: get cart by user
         Cart cart = this.cartRepository.findByUser(user).orElse(null);
         if (cart != null) {
@@ -259,6 +259,11 @@ public class ProductService {
                     orderDetail.setQuantity(cd.getQuantity());
 
                     this.orderDetailRepository.save(orderDetail);
+
+                    // Update product quantity
+                    Product product = cd.getProduct();
+                    product.setQuantity(product.getQuantity() - cd.getQuantity());
+                    this.productRepository.save(product);
                 }
                 // step 2: delete cart_detail and cart
                 for (CartDetail cd : cartDetails) {
