@@ -2,6 +2,8 @@ package vn.hoidanit.laptopshop.entity;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,6 +21,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import vn.hoidanit.laptopshop.repository.UserRepository;
 
 @Entity
 @Table(name = "users")
@@ -26,6 +29,7 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

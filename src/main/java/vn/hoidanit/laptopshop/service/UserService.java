@@ -69,4 +69,8 @@ public class UserService {
         return this.userRepository.findByEmail(email);
     }
 
+    public void saveUser(User user) {
+        this.userRepository.save(user);
+    }
+
 }

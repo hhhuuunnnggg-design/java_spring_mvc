@@ -89,7 +89,11 @@ public class SecurityConfiguration {
                         .requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ cho phép các yêu cầu đến URL /admin/** nếu
                                                                        // người dùng có vai trò ADMIN
                         .anyRequest().authenticated()) // Yêu cầu xác thực cho tất cả các yêu cầu khác
-                .oauth2Login(oauth2 -> oauth2.loginPage("/login"))
+                .oauth2Login(oauth2 -> oauth2.loginPage("/login")
+                        .successHandler(customSuccessHandler())
+                // .failureUrl(authenticationFailureUrl:"/login?error")
+                // .userInfor
+                )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // Luôn tạo phiên làm việc mới cho mỗi yêu
                                                                              // cầu
