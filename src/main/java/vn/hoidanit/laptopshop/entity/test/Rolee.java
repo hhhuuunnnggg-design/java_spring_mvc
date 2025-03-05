@@ -1,4 +1,4 @@
-package vn.hoidanit.laptopshop.entity;
+package vn.hoidanit.laptopshop.entity.test;
 
 import java.util.List;
 
@@ -10,21 +10,22 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import vn.hoidanit.laptopshop.entity.test.Role_User;
 
 @Entity
 @Getter
 @Setter
-@Table(name = "roles")
-public class Role {
+@Table(name = "rolee")
+public class Rolee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String role_name;
     private String description;
 
-    @OneToMany(mappedBy = "role")
-    private List<User> user;
+    @OneToMany(mappedBy = "rolee")
+    List<Auth> auth;
 
+    @OneToMany(mappedBy = "rolee")
+    List<Role_User> role_Users;
 }

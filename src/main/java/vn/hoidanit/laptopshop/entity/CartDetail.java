@@ -27,16 +27,14 @@ public class CartDetail {
 
     private double price;
 
-    // cart_id: long
-    @ManyToOne
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
-
     // product_id: long
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-
+    // cart_id: long
+    @ManyToOne
+    @JoinColumn(name = "cart_id")
+    private Cart cart;
 
 }
