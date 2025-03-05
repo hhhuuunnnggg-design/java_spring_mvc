@@ -22,40 +22,31 @@ import lombok.experimental.FieldDefaults;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     Long id;
+    Long id;
 
     @NotNull
     @Size(min = 5, message = "Tên sản phẩm phải trên 5 ký tự")
-     String name;
+    String name;
 
     @NotNull(message = "Giá sản phẩm không được để trống")
     @DecimalMin(value = "1", message = "Giá sản phẩm phải lớn hơn hoặc bằng 1")
-     Double price;
+    Double price;
 
-     String image;
+    String image;
 
     @Column(columnDefinition = "MEDIUMTEXT")
     @NotNull
     @Size(min = 5, message = "mô tả phải trên 5 ký tự")
-     String detaildesc;
+    String detaildesc;
 
     @NotNull
     @Size(min = 5, message = "mô tả ngắn phải trên 5 ký tự")
-     String shortdesc;
+    String shortdesc;
 
     @NotNull(message = "Số lượng sản phẩm không được để trống")
-    //@DecimalMin(value = "1", message = "Số lượng sản phẩm phải lớn hơn hoặc bằng 1")
     Long quantity;
     Long sold;
     String factory;
     String target;
-
-
-//    @Override
-//    public String toString() {
-//        return "Product [id=" + id + ", name=" + name + ", price=" + price + ", image=" + image + ", detaildesc="
-//                + detaildesc + ", shortdesc=" + shortdesc + ", quantity=" + quantity + ", sold=" + sold + ", factory="
-//                + factory + ", target=" + target + "]";
-//    }
 
 }

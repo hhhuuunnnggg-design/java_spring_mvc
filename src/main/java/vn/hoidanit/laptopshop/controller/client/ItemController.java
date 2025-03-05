@@ -47,7 +47,6 @@ public class ItemController {
         return viewProduct;
     }
 
-
     @GetMapping("/product")
     public ModelAndView getProductList(@RequestParam(value = "page", defaultValue = "1") int page,
             ProductCriteriaDTO productCriteriaDTO,
@@ -106,7 +105,7 @@ public class ItemController {
         return modelAndView;
     }
 
-    //khong phai mua ben nay
+    // khong phai mua ben nay
     @PostMapping("/add-product-to-cart/{id}")
     public ModelAndView addProductToCart(@PathVariable Long id, HttpServletRequest request) {
 
@@ -114,12 +113,12 @@ public class ItemController {
 
         Long productId = id; // Gán giá trị của {id} từ URL vào biến productId
 
-        String email = (String) session.getAttribute("email"); // Lấy email người dùng từ session (cần thiết cho thao tác giỏ hàng)
+        String email = (String) session.getAttribute("email"); // Lấy email người dùng từ session (cần thiết cho thao
+                                                               // tác giỏ hàng)
 
         // Gọi phương thức trong ProductService để thêm sản phẩm vào giỏ hàng
         // Truyền vào email, productId và session để xử lý
         this.productService.handelAddProductToCart(email, productId, session);
-
 
         ModelAndView modelAndView = new ModelAndView("redirect:/");
 
@@ -167,8 +166,7 @@ public class ItemController {
         return "redirect:/checkout";
     }
 
-
-    //chức năng thanh toán
+    // chức năng thanh toán
     @PostMapping("/place-order")
     public String handlePlaceOrder(
             HttpServletRequest request,
@@ -184,7 +182,8 @@ public class ItemController {
 
         final String uuid = UUID.randomUUID().toString().replace("-", "");
 
-        this.productService.handlePlaceOrder(currentUser, session,receiverName, receiverAddress, receiverPhone,paymentMethod, uuid);
+        this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone,
+                paymentMethod, uuid);
 
         if (!paymentMethod.equals("COD")) {
             // todo: redirect to VNPAY
