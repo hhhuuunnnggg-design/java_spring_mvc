@@ -38,7 +38,7 @@ public class ProductController {
         ModelAndView modelAndView = new ModelAndView("admin/product/table-product");
         // xây dụng phân trang
         Pageable pageable = PageRequest.of(page - 1, 2);
-        Page<Product> products = this.productService.gethandleAllProductss(pageable);
+        Page<Product> products = this.productService.gethandleAllProductssAdmin(pageable);
         List<Product> listProducts = products.getContent();
         modelAndView.addObject("tableListProduct", listProducts);
         // trang hiện tại

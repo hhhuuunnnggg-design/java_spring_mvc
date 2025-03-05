@@ -135,6 +135,7 @@ uri="http://www.springframework.org/tags/form" %>
                       <form:input
                         path="quantity"
                         type="number"
+                        min="1"
                         class="form-control ${not empty errorQuantity ? 'is-invalid' : ''}"
                       />
                       ${errorQuantity}

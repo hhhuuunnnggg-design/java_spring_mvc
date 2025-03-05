@@ -48,7 +48,7 @@ public class HomePageController {
         ModelAndView modelAndView = new ModelAndView("client/homepage/showHomePage");
         // 10 sản phẩm
         Pageable pageable = PageRequest.of(page - 1, 4);
-        Page<Product> products = productService.gethandleAllProductss(pageable);
+        Page<Product> products = productService.gethandleAllProductssUser(pageable);
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
 

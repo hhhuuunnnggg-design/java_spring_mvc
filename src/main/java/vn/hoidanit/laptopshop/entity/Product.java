@@ -44,7 +44,7 @@ public class Product {
      String shortdesc;
 
     @NotNull(message = "Số lượng sản phẩm không được để trống")
-    @DecimalMin(value = "1", message = "Số lượng sản phẩm phải lớn hơn hoặc bằng 1")
+    //@DecimalMin(value = "1", message = "Số lượng sản phẩm phải lớn hơn hoặc bằng 1")
     Long quantity;
     Long sold;
     String factory;

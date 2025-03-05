@@ -2,7 +2,6 @@ package vn.hoidanit.laptopshop.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,12 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
-import vn.hoidanit.laptopshop.entity.Cart;
-import vn.hoidanit.laptopshop.entity.CartDetail;
-import vn.hoidanit.laptopshop.entity.Order;
-import vn.hoidanit.laptopshop.entity.OrderDetail;
-import vn.hoidanit.laptopshop.entity.Product;
-import vn.hoidanit.laptopshop.entity.User;
+import vn.hoidanit.laptopshop.entity.*;
 import vn.hoidanit.laptopshop.entity.dto.ProductCriteriaDTO;
 import vn.hoidanit.laptopshop.repository.CartDetailRepository;
 import vn.hoidanit.laptopshop.repository.CartRepository;
@@ -46,10 +40,12 @@ public class ProductService {
     private OrderDetailRepository orderDetailRepository;
 
     // case 0:
+    //index 2 (loc ben user)
     public Page<Product> gethandleAllProductWithPect(Pageable page, ProductCriteriaDTO productCriteriaDTO) {
         if (productCriteriaDTO.getFactory() == null && productCriteriaDTO.getTarget() == null
                 && productCriteriaDTO.getPrice() == null && productCriteriaDTO.getSort() == null) {
-            return this.productRepository.findAll(page);
+            return this.productRepository.findAll((root, query, criteriaBuilder) ->
+                    criteriaBuilder.greaterThan(root.get("quantity"), 0), page);
         }
 
         Specification<Product> combinedSpec = Specification.where(null);
@@ -66,7 +62,9 @@ public class ProductService {
             Specification<Product> currentSpect = this.buildPriceSpecification(productCriteriaDTO.getPrice().get());
             combinedSpec = combinedSpec.and(currentSpect);
         }
-        return this.productRepository.findAll(combinedSpec, page);
+        return this.productRepository.findAll(combinedSpec.and((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThan(root.get("quantity"), 0)), page);
+
     }
 
     // case 6
@@ -105,9 +103,19 @@ public class ProductService {
         return combinedSpec;
     }
 
-    public Page<Product> gethandleAllProductss(Pageable page) {
+    //index(home user)
+    public Page<Product> gethandleAllProductssUser(Pageable page) {
+        return this.productRepository.findAll((root, query, criteriaBuilder) ->
+                criteriaBuilder.greaterThan(root.get(Product_.quantity), criteriaBuilder.literal(0L)), page);
+    }
+
+
+
+
+    public Page<Product> gethandleAllProductssAdmin(Pageable page) {
         return this.productRepository.findAll(page);
     }
+
 
     public void handleDeleteProductId(Long id) {
         productRepository.deleteById(id);
@@ -262,10 +270,15 @@ public class ProductService {
 
                     // Update product quantity
                     Product product = cd.getProduct();
-                    product.setQuantity(product.getQuantity() - cd.getQuantity());
-                    this.productRepository.save(product);
+                    if (product.getQuantity() >= cd.getQuantity()) {
+                        product.setQuantity(product.getQuantity() - cd.getQuantity());
+                        this.productRepository.save(product);
+                    } else {
+                        // Handle the case where there is not enough quantity
+                        throw new IllegalArgumentException("Not enough quantity for product: " + product.getName());
+                    }
                 }
-                // step 2: delete cart_detail and cart
+                    // step 2: delete cart_detail and cart
                 for (CartDetail cd : cartDetails) {
                     this.cartDetailRepository.deleteById(cd.getId());
                 }
