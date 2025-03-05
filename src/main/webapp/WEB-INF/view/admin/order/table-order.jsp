@@ -53,6 +53,7 @@
               <th scope="col">Địa chỉ</th>
               <th scope="col">Số điện thoại</th>
               <th scope="col">Tổng tiền</th>
+               <%-- <th scope="col">Payment</th> --%>
               <th scope="col">Trạng thái</th>
               <th scope="col">Action</th>
             </tr>
@@ -75,6 +76,7 @@
                   />
                   vnđ
                 </td>
+                <%-- <td>${order.receiverName}</td> --%>
                 <td>${order.status}</td>
                 <td>
                   <a href="/admin/order/view/${order.id}">
