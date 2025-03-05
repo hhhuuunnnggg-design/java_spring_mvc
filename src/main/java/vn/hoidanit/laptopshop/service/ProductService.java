@@ -45,7 +45,7 @@ public class ProductService {
         if (productCriteriaDTO.getFactory() == null && productCriteriaDTO.getTarget() == null
                 && productCriteriaDTO.getPrice() == null && productCriteriaDTO.getSort() == null) {
             return this.productRepository.findAll((root, query, criteriaBuilder) ->
-                    criteriaBuilder.greaterThan(root.get("quantity"), 0), page);
+                    criteriaBuilder.greaterThan(root.get(Product_.quantity), criteriaBuilder.literal(0L)), page);
         }
 
         Specification<Product> combinedSpec = Specification.where(null);
@@ -63,7 +63,7 @@ public class ProductService {
             combinedSpec = combinedSpec.and(currentSpect);
         }
         return this.productRepository.findAll(combinedSpec.and((root, query, criteriaBuilder) ->
-                criteriaBuilder.greaterThan(root.get("quantity"), 0)), page);
+                criteriaBuilder.greaterThan(root.get(Product_.quantity), criteriaBuilder.literal(0L))), page);
 
     }
 
