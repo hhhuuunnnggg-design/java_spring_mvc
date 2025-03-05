@@ -86,8 +86,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/", "/login", "product/**", "/client/**", "/css/**", "/js/**", "/images/**",
                                 "/register", "/products/**")
                         .permitAll() // Cho phép tất cả các yêu cầu đến các URL này mà không cần xác thực
-                        .requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ cho phép các yêu cầu đến URL /admin/** nếu
-                                                                       // người dùng có vai trò ADMIN
+                        // .requestMatchers("/admin/**").hasRole("ADMIN") // Chỉ cho phép các yêu cầu
+                        // đến URL /admin/** nếu
+                        // người dùng có vai trò ADMIN
                         .anyRequest().authenticated()) // Yêu cầu xác thực cho tất cả các yêu cầu khác
                 .oauth2Login(oauth2 -> oauth2.loginPage("/login")
                         .successHandler(customSuccessHandler())
