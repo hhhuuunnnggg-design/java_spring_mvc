@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findOneByEmail(String email);
 
-    User findByEmail(String email);
+    User findFirstByEmail(String email);
 
     List<User> findAll();
 
@@ -25,4 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> deleteById(long id);
 
     boolean existsByEmail(String email);
+
+    List<User> findByEmail(String email);
 }

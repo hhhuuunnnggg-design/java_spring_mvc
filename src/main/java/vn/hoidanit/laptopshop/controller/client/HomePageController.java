@@ -1,5 +1,8 @@
 package vn.hoidanit.laptopshop.controller.client;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,9 +27,14 @@ import vn.hoidanit.laptopshop.entity.Order;
 import vn.hoidanit.laptopshop.entity.Product;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.entity.dto.RegisterDTO;
+import vn.hoidanit.laptopshop.entity.test.Auth;
+import vn.hoidanit.laptopshop.entity.test.Menu;
+import vn.hoidanit.laptopshop.entity.test.Role_User;
+import vn.hoidanit.laptopshop.entity.test.Rolee;
 import vn.hoidanit.laptopshop.service.OrderService;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UserService;
+import vn.hoidanit.laptopshop.util.Constant;
 
 @Controller
 public class HomePageController {
@@ -42,6 +50,55 @@ public class HomePageController {
 
     @Autowired
     private OrderService orderService;
+
+    @GetMapping("/logintest")
+    public ModelAndView getlogins(HttpSession session, User users) {
+        ModelAndView modelAndView = new ModelAndView("client/auth/login");
+        User user = userService.findByEmail(users.getEmail()).get(0); // Lấy bản ghi đầu tiên
+        Role_User userRole = (Role_User) user.getRoleUsers().iterator().next();
+        List<Menu> menuList = new ArrayList<>();
+        Rolee role = userRole.getRolee();
+        List<Menu> menuChildList = new ArrayList<>();
+        for (Object obj : role.getAuth()) {
+            Auth auth = (Auth) obj;
+            Menu menu = auth.getMenu();
+            if (menu.getParent_id() == 0 && menu.getOrder_index() != -1 && menu.getActive_flag() == 1
+                    && auth.getPermission() == 1) {
+                menu.setIdMenu(menu.getUrl().replace("/", "") + "Id");
+                menuList.add(menu);
+            } else if (menu.getParent_id() != 0 && menu.getOrder_index() != -1 && menu.getActive_flag() == 1
+                    && auth.getPermission() == 1) {
+                menu.setIdMenu(menu.getUrl().replace("/", "") + "Id");
+                menuChildList.add(menu);
+            }
+        }
+        for (Menu menu : menuList) {
+            List<Menu> childList = new ArrayList<>();
+            for (Menu childMenu : menuChildList) {
+                if (childMenu.getParent_id() == menu.getId()) {
+                    childList.add(childMenu);
+                }
+            }
+            menu.setChild(childList);
+        }
+        sortMenu(menuList);
+        for (Menu menu : menuList) {
+            sortMenu(menu.getChild());
+        }
+        session.setAttribute(Constant.MENU_SESSION, menuList);
+        session.setAttribute(Constant.USER_INFO, user);
+
+        return modelAndView;
+    }
+
+    public void sortMenu(List<Menu> menus) {
+        Collections.sort(menus, new Comparator<Menu>() {
+            @Override
+            public int compare(Menu o1, Menu o2) {
+                return (int) (o1.getOrder_index() - o2.getOrder_index());
+            }
+        });
+    }
 
     @GetMapping("/")
     public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page) {
@@ -89,11 +146,11 @@ public class HomePageController {
 
     }
 
-    @GetMapping("/login")
-    public ModelAndView getlogin() {
-        ModelAndView modelAndView = new ModelAndView("client/auth/login");
-        return modelAndView;
-    }
+//    @GetMapping("/login")
+//    public ModelAndView getlogin() {
+//        ModelAndView modelAndView = new ModelAndView("client/auth/login");
+//        return modelAndView;
+//    }
 
     @GetMapping("/access-deny")
     public ModelAndView getDenyPage() {

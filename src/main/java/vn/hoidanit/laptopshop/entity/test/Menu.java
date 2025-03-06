@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.Transient;
 
 @Entity
 @Setter
@@ -21,10 +22,17 @@ public class Menu {
     private Long id;
 
     private Long parent_id;
-    private Long url;
+    private String url;
     private String name;
     private Long order_index;
     private Long active_flag;
+
+    // không mapping vao csdl
+    @Transient
+    private String IdMenu;
+
+    @Transient
+    private List<Menu> child;
 
     @OneToMany(mappedBy = "menu")
     List<Auth> auth;

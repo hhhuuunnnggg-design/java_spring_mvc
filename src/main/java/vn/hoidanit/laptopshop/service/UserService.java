@@ -21,6 +21,11 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    public List<User> findByEmail(String email) {
+        System.out.println("Find user by email start");
+        return userRepository.findByEmail(email);
+    }
+
     public String handleHello() {
         return "Hello from service";
     }
@@ -66,7 +71,7 @@ public class UserService {
     }
 
     public User getUserByEmail(String email) {
-        return this.userRepository.findByEmail(email);
+        return this.userRepository.findFirstByEmail(email);
     }
 
     public void saveUser(User user) {
