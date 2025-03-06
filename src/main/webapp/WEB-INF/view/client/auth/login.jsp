@@ -32,7 +32,7 @@ uri="http://www.springframework.org/tags/form" %>
                     <h3 class="text-center font-weight-light my-4">Login</h3>
                   </div>
                   <div class="card-body">
-                    <form method="post" action="/logintest">
+                    <form method="post" action="/login">
                       <!-- hiện thông báo đăng nhập sai -->
                       <c:if test="${param.error != null}">
                         <div class="my-2" style="color: red">

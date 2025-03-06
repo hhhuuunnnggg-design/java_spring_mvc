@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +20,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vn.hoidanit.laptopshop.entity.Order;
 import vn.hoidanit.laptopshop.entity.Product;
@@ -51,14 +51,38 @@ public class HomePageController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/logintest")
-    public ModelAndView getlogins(HttpSession session, User users) {
+    @GetMapping("/login")
+    public ModelAndView getlogin(HttpSession session, User users) {
         ModelAndView modelAndView = new ModelAndView("client/auth/login");
-        User user = userService.findByEmail(users.getEmail()).get(0); // Lấy bản ghi đầu tiên
-        Role_User userRole = (Role_User) user.getRoleUsers().iterator().next();
+
+        // Kiểm tra users và email trước
+        if (users == null || users.getEmail() == null || users.getEmail().isEmpty()) {
+            // Xử lý trường hợp không có dữ liệu đầu vào
+            modelAndView.addObject("error", "Email không hợp lệ");
+            return modelAndView;
+        }
+
+        List<User> userList = userService.findByEmail(users.getEmail());
+        if (userList.isEmpty()) {
+            // Nếu không tìm thấy user, trả về trang login với thông báo lỗi
+            modelAndView.addObject("error", "Không tìm thấy người dùng với email này");
+            return modelAndView;
+        }
+
+        User user = userList.get(0); // Lấy user đầu tiên nếu danh sách không rỗng
+        Role_User userRole = null;
+        if (user.getRoleUsers() != null && !user.getRoleUsers().isEmpty()) {
+            userRole = (Role_User) user.getRoleUsers().iterator().next();
+        } else {
+            modelAndView.addObject("error", "Không tìm thấy vai trò cho người dùng này");
+            return modelAndView;
+        }
+
+        // Tiếp tục logic với menu
         List<Menu> menuList = new ArrayList<>();
         Rolee role = userRole.getRolee();
         List<Menu> menuChildList = new ArrayList<>();
+
         for (Object obj : role.getAuth()) {
             Auth auth = (Auth) obj;
             Menu menu = auth.getMenu();
@@ -72,6 +96,7 @@ public class HomePageController {
                 menuChildList.add(menu);
             }
         }
+
         for (Menu menu : menuList) {
             List<Menu> childList = new ArrayList<>();
             for (Menu childMenu : menuChildList) {
@@ -81,10 +106,12 @@ public class HomePageController {
             }
             menu.setChild(childList);
         }
+
         sortMenu(menuList);
         for (Menu menu : menuList) {
             sortMenu(menu.getChild());
         }
+
         session.setAttribute(Constant.MENU_SESSION, menuList);
         session.setAttribute(Constant.USER_INFO, user);
 
@@ -146,11 +173,11 @@ public class HomePageController {
 
     }
 
-//    @GetMapping("/login")
-//    public ModelAndView getlogin() {
-//        ModelAndView modelAndView = new ModelAndView("client/auth/login");
-//        return modelAndView;
-//    }
+    // @GetMapping("/login")
+    // public ModelAndView getlogin() {
+    // ModelAndView modelAndView = new ModelAndView("client/auth/login");
+    // return modelAndView;
+    // }
 
     @GetMapping("/access-deny")
     public ModelAndView getDenyPage() {

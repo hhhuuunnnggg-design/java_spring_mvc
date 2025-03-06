@@ -22,7 +22,7 @@ public class UserService {
     private RoleRepository roleRepository;
 
     public List<User> findByEmail(String email) {
-        System.out.println("Find user by email start");
+
         return userRepository.findByEmail(email);
     }
 
