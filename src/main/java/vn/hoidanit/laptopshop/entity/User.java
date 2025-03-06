@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -26,8 +27,8 @@ import vn.hoidanit.laptopshop.entity.test.Role_User;
 @Setter
 @Getter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
-
+public class User implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L; // Thêm UID cho Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

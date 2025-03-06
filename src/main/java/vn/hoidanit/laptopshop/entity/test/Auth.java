@@ -1,5 +1,7 @@
 package vn.hoidanit.laptopshop.entity.test;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "auth")
-public class Auth {
+public class Auth implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L; // Thêm UID cho Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

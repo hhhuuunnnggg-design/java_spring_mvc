@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -128,18 +129,61 @@ public class HomePageController {
     }
 
     @GetMapping("/")
-    public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page) {
+    @Transactional(readOnly = true)
+    public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/showHomePage");
-        // 10 sản phẩm
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Product> products = productService.gethandleAllProductssUser(pageable);
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
-
-        // trang hiện tại
         modelAndView.addObject("currentPage", page);
-        // số lượng ở trang hiện tại
         modelAndView.addObject("totalPages", products.getTotalPages());
+
+        // Thêm logic menuSession
+        User user = (User) session.getAttribute(Constant.USER_INFO);
+        if (user == null) {
+            String email = (String) session.getAttribute("email");
+            user = userService.getUserByEmail(email);
+            session.setAttribute(Constant.USER_INFO, user);
+        }
+        if (user != null && user.getRoleUsers() != null && !user.getRoleUsers().isEmpty()) {
+            Role_User userRole = user.getRoleUsers().iterator().next();
+            Rolee role = userRole.getRolee();
+            List<Menu> menuList = new ArrayList<>();
+            List<Menu> menuChildList = new ArrayList<>();
+
+            for (Object obj : role.getAuth()) {
+                Auth auth = (Auth) obj;
+                Menu menu = auth.getMenu();
+                if (menu.getParent_id() == 0 && menu.getOrder_index() != -1 && menu.getActive_flag() == 1
+                        && auth.getPermission() == 1) {
+                    menu.setIdMenu(menu.getUrl().replace("/", "") + "Id");
+                    menuList.add(menu);
+                } else if (menu.getParent_id() != 0 && menu.getOrder_index() != -1 && menu.getActive_flag() == 1
+                        && auth.getPermission() == 1) {
+                    menu.setIdMenu(menu.getUrl().replace("/", "") + "Id");
+                    menuChildList.add(menu);
+                }
+            }
+
+            for (Menu menu : menuList) {
+                List<Menu> childList = new ArrayList<>();
+                for (Menu childMenu : menuChildList) {
+                    if (childMenu.getParent_id() == menu.getId()) {
+                        childList.add(childMenu);
+                    }
+                }
+                menu.setChild(childList);
+            }
+
+            sortMenu(menuList);
+            for (Menu menu : menuList) {
+                sortMenu(menu.getChild());
+            }
+
+            session.setAttribute(Constant.MENU_SESSION, menuList);
+        }
+
         return modelAndView;
     }
 

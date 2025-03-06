@@ -1,8 +1,10 @@
 package vn.hoidanit.laptopshop.entity.test;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -15,7 +17,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "rolee")
-public class Rolee {
+public class Rolee implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L; // Thêm UID cho Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,9 +26,9 @@ public class Rolee {
     private String role_name;
     private String description;
 
-    @OneToMany(mappedBy = "rolee")
+    @OneToMany(mappedBy = "rolee", fetch = FetchType.EAGER)
     List<Auth> auth;
 
-    @OneToMany(mappedBy = "rolee")
+    @OneToMany(mappedBy = "rolee", fetch = FetchType.EAGER)
     List<Role_User> role_Users;
 }

@@ -3,7 +3,9 @@ package vn.hoidanit.laptopshop.repository;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import vn.hoidanit.laptopshop.entity.User;
@@ -27,4 +29,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
     List<User> findByEmail(String email);
+
+    // Sửa method findByEmailWithRoles
+    @EntityGraph(attributePaths = { "roleUsers" }) // Sửa "user_role" thành "roleUsers"
+    @Query("SELECT u FROM User u WHERE u.email = :email")
+    Optional<User> findByEmailWithRoles(String email);
+
 }

@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.entity.test;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -8,15 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.Transient;
 
 @Entity
 @Setter
 @Getter
 @Table(name = "menu")
-public class Menu {
+public class Menu implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L; // Thêm UID cho Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

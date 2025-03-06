@@ -1,15 +1,19 @@
 package vn.hoidanit.laptopshop.service;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import vn.hoidanit.laptopshop.entity.Role;
 import vn.hoidanit.laptopshop.entity.User;
 import vn.hoidanit.laptopshop.entity.dto.RegisterDTO;
+import vn.hoidanit.laptopshop.entity.test.Role_User;
 import vn.hoidanit.laptopshop.repository.RoleRepository;
 import vn.hoidanit.laptopshop.repository.UserRepository;
 
@@ -22,8 +26,22 @@ public class UserService {
     private RoleRepository roleRepository;
 
     public List<User> findByEmail(String email) {
-
         return userRepository.findByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public User getUserByEmails(String email) {
+        Optional<User> userOptional = userRepository.findByEmailWithRoles(email);
+        User user = userOptional.orElse(null);
+        if (user != null) {
+            Hibernate.initialize(user.getRoleUsers()); // Tải roleUsers
+            if (!user.getRoleUsers().isEmpty()) {
+                Role_User userRole = user.getRoleUsers().iterator().next();
+                Hibernate.initialize(userRole.getRolee()); // Tải rolee
+                Hibernate.initialize(userRole.getRolee().getAuth()); // Tải auth
+            }
+        }
+        return user;
     }
 
     public String handleHello() {
