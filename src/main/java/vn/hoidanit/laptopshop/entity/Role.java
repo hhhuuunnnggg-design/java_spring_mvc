@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -10,13 +11,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
-import vn.hoidanit.laptopshop.entity.test.Role_User;
 
 @Entity
 @Getter
 @Setter
 @Table(name = "roles")
-public class Role {
+public class Role implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

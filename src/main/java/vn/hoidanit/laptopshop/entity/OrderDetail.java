@@ -1,5 +1,7 @@
 package vn.hoidanit.laptopshop.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,7 +16,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "order_detail")
-public class OrderDetail {
+public class OrderDetail implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

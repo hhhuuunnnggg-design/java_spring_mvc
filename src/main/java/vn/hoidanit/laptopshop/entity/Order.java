@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -20,18 +21,19 @@ import lombok.experimental.FieldDefaults;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Order {
+public class Order implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-     long id;
-     double totalPrice;
-     String receiverName;
-     String receiverAddress;
-     String receiverPhone;
-     String status;
-     String paymentRef;
-     String paymentStatus;
-     String paymentMethod;
+    long id;
+    double totalPrice;
+    String receiverName;
+    String receiverAddress;
+    String receiverPhone;
+    String status;
+    String paymentRef;
+    String paymentStatus;
+    String paymentMethod;
 
     // user id
     @ManyToOne

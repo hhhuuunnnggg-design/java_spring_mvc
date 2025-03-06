@@ -1,5 +1,6 @@
 package vn.hoidanit.laptopshop.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -18,7 +19,8 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "carts")
-public class Cart {
+public class Cart implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -34,7 +36,5 @@ public class Cart {
     // cart_detail_id
     @OneToMany(mappedBy = "cart")
     List<CartDetail> cartDetails;
-
-
 
 }

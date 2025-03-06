@@ -1,5 +1,7 @@
 package vn.hoidanit.laptopshop.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +21,8 @@ import lombok.experimental.FieldDefaults;
 @Entity
 @Table(name = "products")
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Product {
+public class Product implements Serializable { // Thêm Serializable
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;

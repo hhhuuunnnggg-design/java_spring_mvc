@@ -132,11 +132,15 @@ public class HomePageController {
     @Transactional(readOnly = true)
     public ModelAndView getHomePage(@RequestParam(value = "page", defaultValue = "1") int page, HttpSession session) {
         ModelAndView modelAndView = new ModelAndView("client/homepage/showHomePage");
+        // 10 sản phẩm
         Pageable pageable = PageRequest.of(page - 1, 4);
         Page<Product> products = productService.gethandleAllProductssUser(pageable);
         List<Product> prd = products.getContent();
         modelAndView.addObject("listProduct", prd);
+
+        // trang hiện tại
         modelAndView.addObject("currentPage", page);
+        // số lượng ở trang hiện tại
         modelAndView.addObject("totalPages", products.getTotalPages());
 
         // Thêm logic menuSession
