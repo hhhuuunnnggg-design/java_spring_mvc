@@ -126,9 +126,3 @@ public class LaptopshopApplication {
 ```
 
 ---
-
-## ✅ Gợi ý trình diễn nhanh cho CV
-
-- Demo đăng nhập local và Google; quan sát redirect `ROLE_ADMIN` tới `/admin`
-- Thêm sản phẩm vào giỏ, đặt hàng VNPay; xem callback `/thanks` và lịch sử đơn `/order-history`
-- Bật `logging.level.org.springframework.security=DEBUG` để trình diễn flow bảo mật
